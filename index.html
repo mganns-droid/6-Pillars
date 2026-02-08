@@ -95,7 +95,6 @@
             opacity: 0.6;
             cursor: not-allowed;
         }
-        /* Mobile-first chart container fix */
         .chart-container {
             position: relative;
             margin: auto;
@@ -110,11 +109,12 @@
     <div class="container mx-auto p-4 md:p-8 max-w-6xl space-y-12">
         <header class="text-center py-6">
             <h1 class="text-4xl md:text-6xl font-bold tracking-tight" style="color: var(--teal);">Lifestyle Medicine Map</h1>
-            <p class="mt-6 text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                A professional assessment designed to visualise the foundations of your future health and wellbeing across core lifestyle pillars.
+            <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                A professional assessment designed to visualise the foundations of your future health and wellbeing.
             </p>
         </header>
 
+        <!-- Determinants Section -->
         <section class="section-card p-8 md:p-12" style="background-color: var(--charcoal);">
             <div class="max-w-4xl mx-auto">
                 <h2 class="text-3xl font-bold text-center" style="color: var(--light-teal);">The Ground You Stand On</h2>
@@ -146,17 +146,18 @@
                 <div id="additional-pillars-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"></div>
             </div>
 
+            <!-- Profile Visualization -->
             <div class="py-16 border-y border-slate-100">
                 <h3 class="text-2xl font-bold text-center mb-10 text-slate-700">Your Wellbeing Profile</h3>
                 <div class="chart-container">
-                    <!-- Added ARIA roles for Accessibility -->
-                    <canvas id="wellbeingChart" role="img" aria-label="Radar chart showing your scores across lifestyle medicine pillars."></canvas>
+                    <canvas id="wellbeingChart" role="img" aria-label="Radar chart showing your lifestyle scores across different health pillars."></canvas>
                 </div>
             </div>
 
+            <!-- Summary Generation -->
             <div class="mt-16 text-center space-y-8">
                 <button id="get-advice-btn" class="cta-button text-xl">
-                    Generate Your Professional Summary
+                    Generate Your Personalised Summary
                 </button>
                 
                 <div id="advice-output" class="mt-16 text-left hidden border-t border-slate-100 pt-16">
@@ -181,6 +182,9 @@
     </div>
 
     <script>
+        // API Configuration
+        const apiKey = ""; // Environment provides key at runtime
+
         document.addEventListener('DOMContentLoaded', () => {
             const corePillarsGrid = document.getElementById('core-pillars-grid');
             const additionalPillarsGrid = document.getElementById('additional-pillars-grid');
@@ -189,7 +193,6 @@
             const adviceContent = document.getElementById('advice-content');
             const spinner = document.getElementById('spinner');
 
-            // Fixed: All properties (color, anchor, description) are fully populated
             const pillars = [
                 { id: 'nourish', label: 'Nourish', question: 'Whole-food intake?', value: 5, icon: '🍎', description: "Prioritising plant-predominant, minimally processed foods to fuel your body and mind.", color: '#D9F2D9', anchor: '0: Processed | 10: Whole Food', isCore: true },
                 { id: 'move', label: 'Move', question: 'Physical activity level?', value: 5, icon: '🏃', description: "Engaging in consistent daily movement and structured activity for metabolic health.", color: '#D6EEFB', anchor: '0: Sedentary | 10: Very Active', isCore: true },
@@ -266,40 +269,82 @@
                 }
             });
 
+            const generateSummary = async (prompt) => {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: {
+                            responseMimeType: "application/json",
+                            responseSchema: {
+                                type: "OBJECT",
+                                properties: {
+                                    intro: { type: "STRING" },
+                                    strengths: {
+                                        type: "ARRAY",
+                                        items: {
+                                            type: "OBJECT",
+                                            properties: {
+                                                label: { type: "STRING" },
+                                                analysis: { type: "STRING" }
+                                            }
+                                        }
+                                    },
+                                    steps: {
+                                        type: "ARRAY",
+                                        items: {
+                                            type: "OBJECT",
+                                            properties: {
+                                                label: { type: "STRING" },
+                                                advice: { type: "ARRAY", items: { type: "STRING" } }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`AI synthesis failed: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!text) throw new Error("No response from synthesis engine.");
+                return JSON.parse(text);
+            };
+
             getAdviceBtn.addEventListener('click', async () => {
                 adviceOutput.classList.remove('hidden');
                 adviceContent.innerHTML = '';
                 spinner.classList.remove('hidden');
                 getAdviceBtn.disabled = true;
 
-                const resultsSummary = pillars.map(p => `${p.label}: ${p.value}`).join(", ");
-                const customPrompt = `Assess wellbeing for Psych and Lifestyle. Australian English. Results: ${resultsSummary}. Acknowledge lifestyle change as investment. State if unsure, discuss with health professional.`;
+                const resultsSummary = pillars.map(p => `${p.label}: ${p.value}/10`).join(", ");
+                const customPrompt = `Assess wellbeing for Psych and Lifestyle. Australian English. Results: ${resultsSummary}. Acknowledge lifestyle change as a profound investment in future health. State if unsure, discuss with a health professional.`;
 
                 try {
-                    const response = await fetch("/.netlify/functions/gemini", { 
-                        method: 'POST', 
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt: customPrompt }) 
-                    });
+                    const data = await generateSummary(customPrompt);
 
-                    if (!response.ok) throw new Error("API Failure");
-                    const data = await response.json(); 
-
-                    // Hardened Rendering: Simple sanitisation check or using template variables
                     let html = `<div class="bg-teal-50 border-l-4 border-teal-500 p-8 rounded-r-3xl"><p class="text-xl italic font-medium text-teal-900">"${data.intro || ''}"</p></div>`;
                     
-                    if (data.strengths) {
-                        html += `<div class="bg-green-50 p-8 rounded-3xl mt-8"><h3 class="text-2xl font-bold text-green-800 mb-6">🌟 Established Foundations</h3><div class="grid md:grid-cols-2 gap-6">`;
+                    if (data.strengths && data.strengths.length > 0) {
+                        html += `<div class="bg-green-50 p-8 rounded-3xl mt-8"><h3 class="text-2xl font-bold text-green-800 mb-6">Established Foundations</h3><div class="grid md:grid-cols-2 gap-6">`;
                         data.strengths.forEach(s => {
-                            html += `<div class="bg-white p-6 rounded-2xl shadow-sm border border-green-100"><strong class="text-green-700 block text-lg mb-1">${s.label}</strong><p class="text-green-900 text-sm">${s.analysis}</p></div>`;
+                            html += `<div class="bg-white p-6 rounded-2xl shadow-sm border border-green-100"><strong class="text-green-700 block text-lg mb-1">${s.label}</strong><p class="text-green-900 text-sm leading-relaxed">${s.analysis}</p></div>`;
                         });
                         html += `</div></div>`;
                     }
                     
-                    if (data.steps) {
+                    if (data.steps && data.steps.length > 0) {
                         html += `<div class="space-y-10 mt-12">`;
                         data.steps.forEach(a => {
-                            html += `<div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm"><h3 class="text-2xl font-bold text-teal-800 mb-6">🌱 Opportunity for Growth: ${a.label}</h3><ul class="grid md:grid-cols-2 gap-4">`;
+                            html += `<div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm"><h3 class="text-2xl font-bold text-teal-800 mb-6">Opportunity for Growth: ${a.label}</h3><ul class="grid md:grid-cols-2 gap-4">`;
                             a.advice.forEach(step => {
                                 html += `<li class="flex items-start gap-3 bg-slate-50 p-5 rounded-2xl"><span class="text-teal-500 text-xl">✓</span><span class="text-slate-700 font-medium">${step}</span></li>`;
                             });
@@ -308,12 +353,17 @@
                         html += `</div>`;
                     }
 
-                    html += `<div class="text-center p-10 bg-blue-50 rounded-3xl mt-12 text-blue-900 border border-blue-100"><p class="text-xl font-bold mb-4">A Profound Investment in Your Future</p><p class="text-lg leading-relaxed max-w-3xl mx-auto">Sustainable lifestyle modification is one of the most powerful clinical interventions available. If you are unsure how to begin, please discuss these findings with a health professional.</p></div>`;
+                    html += `
+                        <div class="text-center p-10 bg-blue-50 rounded-3xl mt-12 text-blue-900 border border-blue-100">
+                            <p class="text-xl font-bold mb-4">A Profound Investment in Your Future</p>
+                            <p class="text-lg leading-relaxed max-w-3xl mx-auto">Sustainable lifestyle modification is one of the most powerful clinical interventions available. While change can be challenging, every positive adjustment strengthens your long-term health trajectory. If you are unsure how to begin, please discuss these findings with a health professional.</p>
+                        </div>`;
 
                     adviceContent.innerHTML = html;
                     adviceContent.scrollIntoView({ behavior: 'smooth' });
                 } catch (e) {
-                    adviceContent.innerHTML = `<div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto"><h4 class="text-2xl font-bold mb-2">Technical Connection Issue</h4><p class="font-medium text-lg">The analysis engine is currently finishing its setup. Please refresh the page and try again in 1 minute.</p></div>`;
+                    console.error("Synthesis Error:", e);
+                    adviceContent.innerHTML = `<div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto"><h4 class="text-2xl font-bold mb-2">Synthesis Unavailable</h4><p class="font-medium text-lg text-red-600">The analysis engine encountered a connection error. Details: ${e.message}</p></div>`;
                 } finally {
                     spinner.classList.add('hidden');
                     getAdviceBtn.disabled = false;
