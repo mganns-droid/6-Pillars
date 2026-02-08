@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 /**
  * Netlify Function: gemini.js
  * Location: netlify/functions/gemini.js
@@ -44,7 +46,9 @@ exports.handler = async (event) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { responseMimeType: "application/json" }
+          generationConfig: { 
+            responseMimeType: "application/json" 
+          }
         })
       }
     );
@@ -58,7 +62,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
-      body: feedbackText
+      body: feedbackText // Returns the JSON string of the analysis
     };
 
   } catch (error) {
