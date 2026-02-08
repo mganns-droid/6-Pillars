@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lifestyle Medicine Assessment | Psych and Lifestyle</title>
-    <!-- Core External Libraries -->
+    <!-- Professional Health-Tech Stack -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -91,10 +91,6 @@
             transform: translateY(-2px);
             box-shadow: 0 12px 24px -5px rgba(43, 179, 177, 0.5);
         }
-        .cta-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
         .chart-container {
             position: relative;
             margin: auto;
@@ -110,7 +106,7 @@
         <header class="text-center py-6">
             <h1 class="text-4xl md:text-6xl font-bold tracking-tight" style="color: var(--teal);">Lifestyle Medicine Map</h1>
             <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                A professional assessment designed to visualise the foundations of your future health and wellbeing.
+                An evidence-based exploration of your health foundations, curated by Psych and Lifestyle.
             </p>
         </header>
 
@@ -120,10 +116,10 @@
                 <h2 class="text-3xl font-bold text-center" style="color: var(--light-teal);">The Ground You Stand On</h2>
                 <div class="mt-8 space-y-6 text-slate-300 text-lg leading-relaxed">
                     <p>
-                        Lifestyle medicine acknowledges that our health is deeply influenced by the "Ground You Stand On"—the social and environmental determinants of health.
+                        Lifestyle medicine recognises that individual health is fundamentally anchored in the "Ground You Stand On"—the social and environmental determinants of wellbeing. These factors encompass environmental stability, financial security, and access to supportive infrastructure.
                     </p>
                     <p>
-                        While this tool focuses on individual lifestyle choices, it is vital to acknowledge these broader circumstances with compassion. Your journey is unique, and small, sustainable changes within your current environment are significant investments in your long-term vitality.
+                        While this tool focuses on personal lifestyle choices, it is vital to acknowledge these broader circumstances with compassion. Your journey is unique, and small, sustainable changes within your current environment are significant investments in your long-term vitality.
                     </p>
                 </div>
             </div>
@@ -133,7 +129,7 @@
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold mb-4" style="color: var(--teal);">Your Lifestyle Pillars</h2>
                 <p class="text-gray-500 text-lg max-w-2xl mx-auto">
-                    Evaluate your current level of engagement in each domain.
+                    Evaluate your current level of engagement. Use the sliders to reflect your typical experience over the recent month.
                 </p>
             </div>
             
@@ -150,7 +146,7 @@
             <div class="py-16 border-y border-slate-100">
                 <h3 class="text-2xl font-bold text-center mb-10 text-slate-700">Your Wellbeing Profile</h3>
                 <div class="chart-container">
-                    <canvas id="wellbeingChart" role="img" aria-label="Radar chart showing your lifestyle scores across different health pillars."></canvas>
+                    <canvas id="wellbeingChart" role="img" aria-label="A radar chart visualising your lifestyle medicine pillar scores."></canvas>
                 </div>
             </div>
 
@@ -166,7 +162,7 @@
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        <p class="text-slate-600 font-semibold text-xl">Synthesising your lifestyle analysis...</p>
+                        <p class="text-slate-600 font-semibold text-xl text-center">Synthesising your professional analysis...</p>
                     </div>
                     <div id="advice-content" class="space-y-12 pb-12"></div>
                 </div>
@@ -175,16 +171,14 @@
 
         <footer class="text-center py-12 border-t border-slate-200" style="color: var(--slate-gray);">
             <p class="max-w-2xl mx-auto text-sm">
-                This tool provides general feedback based on Australian Lifestyle Medicine principles. It is not a substitute for professional clinical advice.
+                This tool provides general feedback based on Australian Lifestyle Medicine principles. It is not a substitute for clinical consultation.
             </p>
-            <p class="mt-6 font-bold">&copy; 2025 Psych and Lifestyle. All rights reserved.</p>
+            <p class="mt-6 font-bold text-teal-700">Psych and Lifestyle | ASLM Fellow Directed</p>
+            <p class="mt-2 font-medium">&copy; 2025 Psych and Lifestyle. All rights reserved.</p>
         </footer>
     </div>
 
     <script>
-        // API Configuration
-        const apiKey = ""; // Environment provides key at runtime
-
         document.addEventListener('DOMContentLoaded', () => {
             const corePillarsGrid = document.getElementById('core-pillars-grid');
             const additionalPillarsGrid = document.getElementById('additional-pillars-grid');
@@ -269,56 +263,6 @@
                 }
             });
 
-            const generateSummary = async (prompt) => {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-                
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
-                        generationConfig: {
-                            responseMimeType: "application/json",
-                            responseSchema: {
-                                type: "OBJECT",
-                                properties: {
-                                    intro: { type: "STRING" },
-                                    strengths: {
-                                        type: "ARRAY",
-                                        items: {
-                                            type: "OBJECT",
-                                            properties: {
-                                                label: { type: "STRING" },
-                                                analysis: { type: "STRING" }
-                                            }
-                                        }
-                                    },
-                                    steps: {
-                                        type: "ARRAY",
-                                        items: {
-                                            type: "OBJECT",
-                                            properties: {
-                                                label: { type: "STRING" },
-                                                advice: { type: "ARRAY", items: { type: "STRING" } }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`AI synthesis failed: ${response.status}`);
-                }
-
-                const result = await response.json();
-                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (!text) throw new Error("No response from synthesis engine.");
-                return JSON.parse(text);
-            };
-
             getAdviceBtn.addEventListener('click', async () => {
                 adviceOutput.classList.remove('hidden');
                 adviceContent.innerHTML = '';
@@ -326,28 +270,54 @@
                 getAdviceBtn.disabled = true;
 
                 const resultsSummary = pillars.map(p => `${p.label}: ${p.value}/10`).join(", ");
-                const customPrompt = `Assess wellbeing for Psych and Lifestyle. Australian English. Results: ${resultsSummary}. Acknowledge lifestyle change as a profound investment in future health. State if unsure, discuss with a health professional.`;
+                const customPrompt = `Assess this wellbeing profile for a Psych and Lifestyle client. Use Australian English. Results: ${resultsSummary}. MANDATORY: Acknowledge that lifestyle change is a profound investment in future health. MANDATORY: State that if unsure how to start, please discuss these ideas with a health professional.`;
 
                 try {
-                    const data = await generateSummary(customPrompt);
-
-                    let html = `<div class="bg-teal-50 border-l-4 border-teal-500 p-8 rounded-r-3xl"><p class="text-xl italic font-medium text-teal-900">"${data.intro || ''}"</p></div>`;
+                    // Robust path construction to fix URL parse errors in sandboxed environments
+                    // We use the full origin (or fallback to window location) to resolve the relative path
+                    const baseUrl = window.location.origin === "null" || !window.location.origin 
+                        ? window.location.href.split('?')[0].split('#')[0] 
+                        : window.location.origin;
                     
-                    if (data.strengths && data.strengths.length > 0) {
-                        html += `<div class="bg-green-50 p-8 rounded-3xl mt-8"><h3 class="text-2xl font-bold text-green-800 mb-6">Established Foundations</h3><div class="grid md:grid-cols-2 gap-6">`;
+                    const apiEndpoint = new URL("/.netlify/functions/gemini", baseUrl).href;
+
+                    const response = await fetch(apiEndpoint, { 
+                        method: 'POST', 
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt: customPrompt }) 
+                    });
+
+                    if (!response.ok) {
+                        const errData = await response.json().catch(() => ({}));
+                        throw new Error(errData.error || `Synthesis failed (Status: ${response.status})`);
+                    }
+                    
+                    const data = await response.json(); 
+
+                    // Validation to prevent "undefined" output
+                    if (!data || typeof data !== 'object' || !data.intro) {
+                        throw new Error("The synthesis engine returned an invalid data structure.");
+                    }
+
+                    let html = `<div class="bg-teal-50 border-l-4 border-teal-500 p-8 rounded-r-3xl"><p class="text-xl italic font-medium text-teal-900">"${data.intro}"</p></div>`;
+                    
+                    if (data.strengths && Array.isArray(data.strengths)) {
+                        html += `<div class="bg-green-50 p-8 rounded-3xl mt-8"><h3 class="text-2xl font-bold text-green-800 mb-6">🌟 Established Foundations</h3><div class="grid md:grid-cols-2 gap-6">`;
                         data.strengths.forEach(s => {
-                            html += `<div class="bg-white p-6 rounded-2xl shadow-sm border border-green-100"><strong class="text-green-700 block text-lg mb-1">${s.label}</strong><p class="text-green-900 text-sm leading-relaxed">${s.analysis}</p></div>`;
+                            html += `<div class="bg-white p-6 rounded-2xl shadow-sm border border-green-100"><strong class="text-green-700 block text-lg mb-1">${s.label || 'Domain Asset'}</strong><p class="text-green-900 text-sm leading-relaxed">${s.analysis || ''}</p></div>`;
                         });
                         html += `</div></div>`;
                     }
                     
-                    if (data.steps && data.steps.length > 0) {
+                    if (data.steps && Array.isArray(data.steps)) {
                         html += `<div class="space-y-10 mt-12">`;
                         data.steps.forEach(a => {
-                            html += `<div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm"><h3 class="text-2xl font-bold text-teal-800 mb-6">Opportunity for Growth: ${a.label}</h3><ul class="grid md:grid-cols-2 gap-4">`;
-                            a.advice.forEach(step => {
-                                html += `<li class="flex items-start gap-3 bg-slate-50 p-5 rounded-2xl"><span class="text-teal-500 text-xl">✓</span><span class="text-slate-700 font-medium">${step}</span></li>`;
-                            });
+                            html += `<div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm"><h3 class="text-2xl font-bold text-teal-800 mb-6">🌱 Opportunity for Growth: ${a.label || ''}</h3><ul class="grid md:grid-cols-2 gap-4">`;
+                            if (a.advice && Array.isArray(a.advice)) {
+                                a.advice.forEach(step => {
+                                    html += `<li class="flex items-start gap-3 bg-slate-50 p-5 rounded-2xl"><span class="text-teal-500 text-xl">✓</span><span class="text-slate-700 font-medium">${step}</span></li>`;
+                                });
+                            }
                             html += `</ul></div>`;
                         });
                         html += `</div>`;
@@ -356,14 +326,22 @@
                     html += `
                         <div class="text-center p-10 bg-blue-50 rounded-3xl mt-12 text-blue-900 border border-blue-100">
                             <p class="text-xl font-bold mb-4">A Profound Investment in Your Future</p>
-                            <p class="text-lg leading-relaxed max-w-3xl mx-auto">Sustainable lifestyle modification is one of the most powerful clinical interventions available. While change can be challenging, every positive adjustment strengthens your long-term health trajectory. If you are unsure how to begin, please discuss these findings with a health professional.</p>
+                            <p class="text-lg leading-relaxed max-w-3xl mx-auto">Sustainable lifestyle modification is one of the most powerful clinical interventions available. If you are unsure how to begin, please discuss these findings with a health professional for personalised guidance.</p>
                         </div>`;
 
                     adviceContent.innerHTML = html;
                     adviceContent.scrollIntoView({ behavior: 'smooth' });
                 } catch (e) {
-                    console.error("Synthesis Error:", e);
-                    adviceContent.innerHTML = `<div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto"><h4 class="text-2xl font-bold mb-2">Synthesis Unavailable</h4><p class="font-medium text-lg text-red-600">The analysis engine encountered a connection error. Details: ${e.message}</p></div>`;
+                    console.error("Connection Error:", e);
+                    adviceContent.innerHTML = `
+                        <div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto">
+                            <h4 class="text-2xl font-bold mb-2">Technical Connection Issue</h4>
+                            <p class="font-medium text-lg leading-relaxed">
+                                The analysis engine encountered an error: <span class="font-bold">${e.message}</span>. 
+                                <br><br>
+                                Note: Netlify functions are only available on the live deployed site. If this is a preview, the connection may be restricted.
+                            </p>
+                        </div>`;
                 } finally {
                     spinner.classList.add('hidden');
                     getAdviceBtn.disabled = false;
