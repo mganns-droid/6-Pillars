@@ -27,24 +27,24 @@
     </style>
 </head>
 <body>
-
     <div class="container mx-auto p-4 md:p-8 max-w-6xl space-y-10">
         <header class="text-center py-4">
             <h1 class="text-3xl md:text-5xl font-bold tracking-tight" style="color: var(--teal);">Lifestyle Medicine Map</h1>
-            <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">An encouraging exploration of the foundations for your future health and wellbeing.</p>
+            <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">An encouraging look at the foundations of your future health and wellbeing.</p>
         </header>
 
         <section class="section-card p-6 md:p-10" style="background-color: var(--charcoal);">
             <h2 class="text-2xl font-bold text-center" style="color: var(--light-teal);">The Ground You Stand On</h2>
             <p class="mt-4 text-center max-w-3xl mx-auto text-slate-300 text-lg leading-relaxed">
-                Health outcomes are significantly influenced by life circumstances. Acknowledging these factors with compassion is a key step toward making choices that support your unique journey.
+                Health is significantly influenced by our circumstances, such as housing, income, and community. 
+                Acknowledging these factors with compassion is a key step toward making choices that support your journey.
             </p>
         </section>
 
         <section class="section-card p-6 md:p-10">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-bold" style="color: var(--teal);">Your Lifestyle Pillars</h2>
-                 <p class="mt-2 text-gray-500 text-lg">A subjective assessment across core health domains.</p>
+                 <p class="mt-2 text-gray-500 text-lg">A subjective assessment of how you are tracking across key health domains.</p>
             </div>
             
             <div id="core-pillars-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
@@ -93,14 +93,14 @@
         const spinner = document.getElementById('spinner');
 
         const pillars = [
-            { id: 'nourish', label: 'Nourish', question: 'Whole-food intake?', value: 5, icon: '🍎', description: "Focusing on minimally processed, whole foods.", color: '#D9F2D9' },
-            { id: 'move', label: 'Move', question: 'Activity consistency?', value: 5, icon: '🏃', description: "Daily movement that feels energising.", color: '#D6EEFB' },
-            { id: 'manageStress', label: 'Manage Stress', question: 'Relaxation efficacy?', value: 5, icon: '🧘', description: "Simple techniques to help your body reset.", color: '#E6E4F9' },
-            { id: 'rest', label: 'Rest', question: 'Sleep restorative quality?', value: 5, icon: '😴', description: "Prioritising rest to allow for recovery.", color: '#E2F0F7' },
-            { id: 'connect', label: 'Connect', question: 'Social network strength?', value: 5, icon: '🤝', description: "Nurturing supportive relationships.", color: '#FFE4D6' },
-            { id: 'avoidRisks', label: 'Avoid Risks', question: 'Substance mindfulness?', value: 5, icon: '🚭', description: "Limiting alcohol and avoiding tobacco.", color: '#FAD9DC' },
-            { id: 'purpose', label: 'Purpose', question: 'Connection to meaning?', value: 5, icon: '🧭', description: "Living in alignment with your personal values.", isCore: false, color: '#FAE7B5' },
-            { id: 'nature', label: 'Nature', question: 'Time spent outdoors?', value: 5, icon: '🌳', description: "Engaging with the natural world.", isCore: false, color: '#DDEEE0' },
+            { id: 'nourish', label: 'Nourish', question: 'Whole-food intake?', value: 5, icon: '🍎', description: "Focusing on minimally processed, whole foods.", anchor: '0 = Processed; 10 = Whole foods', color: '#D9F2D9' },
+            { id: 'move', label: 'Move', question: 'Activity consistency?', value: 5, icon: '🏃', description: "Daily movement that feels energising.", anchor: '0 = Sedentary; 10 = Consistently active', color: '#D6EEFB' },
+            { id: 'manageStress', label: 'Manage Stress', question: 'Relaxation efficacy?', value: 5, icon: '🧘', description: "Simple techniques to help your body reset.", anchor: '0 = Overwhelmed; 10 = Managing well', color: '#E6E4F9' },
+            { id: 'rest', label: 'Rest', question: 'Sleep restorative quality?', value: 5, icon: '😴', description: "Prioritising rest to allow for recovery.", anchor: '0 = Poor; 10 = Restorative', color: '#E2F0F7' },
+            { id: 'connect', label: 'Connect', question: 'Social network strength?', value: 5, icon: '🤝', description: "Nurturing supportive relationships.", anchor: '0 = Isolated; 10 = Connected', color: '#FFE4D6' },
+            { id: 'avoidRisks', label: 'Avoid Risks', question: 'Substance mindfulness?', value: 5, icon: ' Smoking ', description: "Limiting alcohol and avoiding tobacco.", anchor: '0 = High usage; 10 = Consistent avoidance', color: '#FAD9DC' },
+            { id: 'purpose', label: 'Purpose', question: 'Connection to meaning?', value: 5, icon: '🧭', description: "Living in alignment with your personal values.", isCore: false, anchor: '0 = Ambiguous; 10 = Purpose-driven', color: '#FAE7B5' },
+            { id: 'nature', label: 'Nature', question: 'Time spent outdoors?', value: 5, icon: '🌳', description: "Engaging with the natural world.", isCore: false, anchor: '0 = Rarely; 10 = Daily', color: '#DDEEE0' },
         ];
 
         function renderPillars() {
@@ -120,7 +120,7 @@
                                <input type="range" min="0" max="10" value="${p.value}" data-index="${i}" class="w-full">
                                <span class="font-bold text-xl w-10 text-center text-teal-600">${p.value}</span>
                             </div>
-                            <p class="text-[10px] mt-3 text-center text-slate-400 italic font-bold uppercase tracking-wider">0 = Low Engagement | 10 = High Engagement</p>
+                            <p class="text-[10px] mt-3 text-center text-slate-400 italic font-bold uppercase tracking-wider">${p.anchor}</p>
                         </div>
                     </div>`;
                 if (p.isCore !== false) corePillarsGrid.innerHTML += html;
@@ -162,7 +162,6 @@
             getAdviceBtn.disabled = true;
 
             try {
-                // Send current assessment data to the serverless function
                 const response = await fetch("/.netlify/functions/gemini", { 
                     method: 'POST', 
                     headers: { 'Content-Type': 'application/json' },
@@ -171,16 +170,14 @@
 
                 if (!response.ok) throw new Error("API_FAIL");
                 const apiData = await response.json();
-                
-                let text = apiData.candidates[0].content.parts[0].text;
-                const data = JSON.parse(text);
+                const data = JSON.parse(apiData.feedback);
 
                 let html = `<p class="text-xl text-center font-medium italic text-slate-700 pb-8 border-b">"${data.intro}"</p>`;
 
                 if (data.strengths?.length) {
                     html += `
                         <div class="bg-green-50 p-8 rounded-3xl mt-8">
-                            <h3 class="text-2xl font-bold text-green-800 mb-6">Established Health Foundations</h3>
+                            <h3 class="text-2xl font-bold text-green-800 mb-6">Your Established Assets</h3>
                             <div class="grid md:grid-cols-2 gap-4">
                                 ${data.strengths.map(s => `
                                     <div class="bg-white p-4 rounded-xl shadow-sm">
@@ -197,7 +194,7 @@
                     data.steps.forEach(a => {
                         html += `
                             <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
-                                <h3 class="text-2xl font-bold text-teal-800 mb-6">Growth Opportunity: ${a.label}</h3>
+                                <h3 class="text-2xl font-bold text-teal-800 mb-6">Opportunity: ${a.label}</h3>
                                 <ul class="grid md:grid-cols-2 gap-4">
                                     ${a.advice.map(step => `
                                         <li class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
@@ -212,19 +209,15 @@
                 }
 
                 html += `
-                    <div class="mt-12 text-center p-8 bg-blue-50 border border-blue-100 rounded-3xl text-blue-900">
+                    <div class="text-center p-8 bg-blue-50 rounded-3xl mt-8 text-blue-900">
                         <p class="text-lg font-semibold">Lifestyle change is a powerful investment in your future.</p>
-                        <p class="mt-2 leading-relaxed">While modification can be challenging, every small positive choice matters. If you are unsure how to start, please discuss these ideas with a health professional who can provide personalised assistance.</p>
+                        <p class="mt-2 leading-relaxed">While modification can be challenging, every small positive choice matters. If you are unsure how to start, please discuss these ideas with a health professional.</p>
                     </div>`;
 
                 adviceContent.innerHTML = html;
                 adviceContent.scrollIntoView({ behavior: 'smooth' });
             } catch (e) {
-                adviceContent.innerHTML = `
-                    <div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto">
-                        <h4 class="text-2xl font-bold mb-2">Analysis Engine Connectivity Issue</h4>
-                        <p class="font-medium">The service is currently unavailable. Please verify that the 'package.json' file is present in your GitHub root and that you have selected "Clear cache and deploy site" in the Netlify dashboard.</p>
-                    </div>`;
+                adviceContent.innerHTML = `<div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto"><h4 class="text-2xl font-bold mb-2">Technical Connection Issue</h4><p class="font-medium">The analysis engine is currently establishing a connection. Please verify your 'GEMINI_API_KEY' variable and redeploy with 'Clear cache' if the issue persists.</p></div>`;
             } finally {
                 spinner.classList.add('hidden');
                 getAdviceBtn.disabled = false;
