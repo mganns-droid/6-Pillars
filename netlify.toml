@@ -1,10 +1,11 @@
 [build]
-  # Directs Netlify to the correct folder for your serverless functions
+  # Directs Netlify to the correct folder for your functions
   functions = "netlify/functions"
 
 [[redirects]]
-  # Ensures the frontend can always find the function path
+  # Simplifies API calls for the frontend
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
+
 
