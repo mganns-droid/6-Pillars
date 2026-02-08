@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lifestyle Medicine Assessment | Psych and Lifestyle</title>
-    <!-- Corrected external resource links -->
+    <!-- Core External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,17 +36,9 @@
         </section>
 
         <section class="section-card p-6 md:p-10">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold" style="color: var(--teal);">Your Lifestyle Pillars</h2>
-                 <p class="mt-2 text-gray-500 text-lg">A subjective assessment across core health domains.</p>
-            </div>
-            
             <div id="core-pillars-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
             <div class="my-16 p-10 rounded-3xl" style="background-color: #F1F5F9;">
-                <div class="text-center">
-                    <h2 class="text-2xl font-bold" style="color: var(--teal);">Connection & Meaning</h2>
-                </div>
-                <div id="additional-pillars-grid" class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"></div>
+                <div id="additional-pillars-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"></div>
             </div>
             <div class="py-12 border-y border-slate-50">
                  <div class="w-full max-w-2xl mx-auto h-[450px]"><canvas id="wellbeingChart"></canvas></div>
@@ -56,19 +48,13 @@
                 <button id="get-advice-btn" class="cta-button text-lg">Generate Your Personalised Summary</button>
                 <div id="advice-output" class="mt-16 text-left hidden border-t border-slate-100 pt-16">
                     <div id="spinner" class="hidden flex flex-col items-center py-12">
-                        <!-- Corrected XML Namespace -->
                         <svg class="animate-spin h-12 w-12 text-teal-500 mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        <p class="text-slate-600 font-semibold text-lg">Synthesising your professional feedback...</p>
+                        <p class="text-slate-600 font-semibold text-lg">Synthesising your professional summary...</p>
                     </div>
                     <div id="advice-content" class="space-y-12 pb-12"></div>
                 </div>
             </div>
         </section>
-
-        <footer class="text-center py-12 border-t border-slate-200" style="color: var(--slate-gray);">
-            <p class="font-bold">&copy; 2025 Psych and Lifestyle. All rights reserved.</p>
-            <p class="mt-2"><a href="https://www.psychandlifestyle.com" target="_blank" class="text-teal-600 hover:underline">www.psychandlifestyle.com</a></p>
-        </footer>
     </div>
 
     <script>
@@ -139,11 +125,8 @@
                     body: JSON.stringify({ ratings: pillars }) 
                 });
 
-                if (!response.ok) throw new Error("Server communication issue.");
-                const apiData = await response.json(); 
-
-                let text = apiData.candidates[0].content.parts[0].text;
-                const data = JSON.parse(text);
+                if (!response.ok) throw new Error("Server communication failure.");
+                const data = await response.json(); 
 
                 let html = `<p class="text-xl text-center font-medium italic text-slate-700 pb-8 border-b">"${data.intro}"</p>`;
                 if (data.strengths?.length) {
@@ -152,12 +135,12 @@
                 if (data.steps?.length) {
                     html += `<div class="space-y-10 mt-8">${data.steps.map(a => `<div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm"><h3 class="text-2xl font-bold text-teal-800 mb-6">Growth Opportunity: ${a.label}</h3><ul class="grid md:grid-cols-2 gap-4">${a.advice.map(step => `<li class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl"><span class="text-teal-500 font-bold">★</span><span class="text-slate-700">${step}</span></li>`).join('')}</ul></div>`).join('')}</div>`;
                 }
-                html += `<div class="text-center p-8 bg-blue-50 rounded-3xl mt-8 text-blue-900"><p class="text-lg font-semibold">Lifestyle change is a powerful investment in your future.</p><p class="mt-2">If you are unsure how to start, please discuss these ideas with a health professional.</p></div>`;
+                html += `<div class="text-center p-8 bg-blue-50 rounded-3xl mt-8 text-blue-900"><p class="text-lg font-semibold">Lifestyle change is a powerful investment in your future.</p><p class="mt-2 leading-relaxed">If you are unsure how to start, please discuss these ideas with a health professional.</p></div>`;
 
                 adviceContent.innerHTML = html;
                 adviceContent.scrollIntoView({ behavior: 'smooth' });
             } catch (e) {
-                adviceContent.innerHTML = `<div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto"><h4 class="text-2xl font-bold mb-2">Technical Connection Issue</h4><p class="font-medium">The analysis engine is finishing its setup. Please refresh the page and try again in 1 minute.</p></div>`;
+                adviceContent.innerHTML = `<div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto"><h4 class="text-2xl font-bold mb-2">Technical Connection Issue</h4><p class="font-medium">The analysis engine is currently finishing its setup. Please refresh the page and try again in 1 minute.</p></div>`;
             } finally {
                 spinner.classList.add('hidden');
                 getAdviceBtn.disabled = false;
