@@ -1,3 +1,9 @@
 [build]
-  publish = "."
-  command = "echo 'No build needed'"
+  # Directs Netlify to the correct folder for your serverless functions
+  functions = "netlify/functions"
+
+[[redirects]]
+  # Ensures the frontend can always find the function path
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
