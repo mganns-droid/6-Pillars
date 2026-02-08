@@ -1,8 +1,7 @@
-const fetch = require('node-fetch');
-
 /**
  * Netlify Function: gemini.js
- * Verified Logic: Synchronised with GEMINI_API_KEY and lifestyle_map.html data requirements.
+ * Verified logic using Native Fetch (Node 18+) and lower-case Schema types.
+ * Synchronised with Psych and Lifestyle assessment requirements.
  */
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
@@ -16,12 +15,13 @@ exports.handler = async (event) => {
         if (!apiKey) {
             return {
                 statusCode: 500,
-                body: JSON.stringify({ error: "System Configuration Error: GEMINI_API_KEY missing." })
+                body: JSON.stringify({ error: "GEMINI_API_KEY missing from Netlify environment." })
             };
         }
 
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
+        // Utilising native fetch for improved runtime stability
         const apiResponse = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -30,30 +30,31 @@ exports.handler = async (event) => {
                 generationConfig: {
                     responseMimeType: "application/json",
                     responseSchema: {
-                        type: "OBJECT",
+                        type: "object",
                         properties: {
-                            intro: { type: "STRING" },
+                            intro: { type: "string" },
                             strengths: {
-                                type: "ARRAY",
+                                type: "array",
                                 items: {
-                                    type: "OBJECT",
+                                    type: "object",
                                     properties: {
-                                        label: { type: "STRING" },
-                                        analysis: { type: "STRING" }
+                                        label: { type: "string" },
+                                        analysis: { type: "string" }
                                     }
                                 }
                             },
                             steps: {
-                                type: "ARRAY",
+                                type: "array",
                                 items: {
-                                    type: "OBJECT",
+                                    type: "object",
                                     properties: {
-                                        label: { type: "STRING" },
-                                        advice: { type: "ARRAY", items: { type: "STRING" } }
+                                        label: { type: "string" },
+                                        advice: { type: "array", items: { type: "string" } }
                                     }
                                 }
                             }
-                        }
+                        },
+                        required: ["intro", "strengths", "steps"]
                     }
                 }
             })
@@ -62,9 +63,10 @@ exports.handler = async (event) => {
         const result = await apiResponse.json();
 
         if (!apiResponse.ok) {
+            console.error("Gemini API Error:", result);
             return {
                 statusCode: apiResponse.status,
-                body: JSON.stringify({ error: result.error?.message || "AI communication failed." })
+                body: JSON.stringify({ error: result.error?.message || "AI API Error" })
             };
         }
 
@@ -77,10 +79,10 @@ exports.handler = async (event) => {
         };
 
     } catch (error) {
-        console.error("Critical Execution Error:", error);
+        console.error("Critical Function Crash:", error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: "The server encountered a logic error during synthesis." })
+            body: JSON.stringify({ error: "The server encountered an error during synthesis." })
         };
     }
 };
