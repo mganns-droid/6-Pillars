@@ -1,77 +1,85 @@
-// netlify/functions/ai-feedback.js
+const fetch = require('node-fetch');
 
-exports.handler = async (event) => {
-  // Only accept POST requests
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
-  }
-
-  try {
-    const { ratings } = JSON.parse(event.body);
-
-    // Validate input
-    if (!ratings || !Array.isArray(ratings)) {
-      return { statusCode: 400, body: JSON.stringify({ error: 'Invalid ratings data' }) };
+/**
+ * Netlify Function: gemini.js
+ * Location: netlify/functions/gemini.js
+ * * Securely handles the communication with Google Gemini 1.5 Flash.
+ */
+exports.handler = async function(event, context) {
+    // Security check: Only allow POST requests
+    if (event.httpMethod !== "POST") {
+        return { statusCode: 405, body: "Method Not Allowed" };
     }
 
-    // Get API key from Netlify environment variables
-    const apiKey = process.env.GOOGLE_AI_KEY;
+    // Access the API Key from Netlify Environment Variables
+    // Ensure the key name in Netlify Dashboard is exactly: GEMINI_API_KEY
+    const apiKey = process.env.GEMINI_API_KEY;
+
     if (!apiKey) {
-      return { statusCode: 500, body: JSON.stringify({ error: 'API key not configured' }) };
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: "Server Configuration Error: GEMINI_API_KEY is missing." })
+        };
     }
 
-    // Build the prompt for the AI
-    const strengthItems = ratings.filter(r => r.value >= 7).map(r => `* ${r.id} (rated ${r.value}/10)`).join('\n');
-    const focusItems = ratings.filter(r => r.value <= 5).map(r => `* ${r.id} (rated ${r.value}/10)`).join('\n');
+    try {
+        const { ratings } = JSON.parse(event.body);
 
-    const prompt = `You are a compassionate and encouraging Australian lifestyle medicine coach. A user has reflected on their wellbeing across 8 lifestyle pillars. Your task is to provide balanced, positive, and actionable feedback.
+        // Map the ratings into a readable format for the AI
+        const strengthItems = ratings.filter(r => r.value >= 7).map(r => `* ${r.label} (Score: ${r.value}/10)`).join('\n');
+        const focusItems = ratings.filter(r => r.value <= 5).map(r => `* ${r.label} (Score: ${r.value}/10)`).join('\n');
 
-**User's Self-Assessment:**
-${strengthItems ? `**Strengths (rated 7 or higher):**\n${strengthItems}\n` : ''}
-${focusItems ? `**Focus Areas (rated 5 or lower):**\n${focusItems}\n` : ''}
+        const prompt = `Act as an encouraging and professional health coach from Psych and Lifestyle. 
+        Provide positive, motivating feedback based on these wellbeing assessment results. 
+        
+        TONE: Warm, supportive, and formal. Use Australian English and spellings.
+        MANDATORY: Acknowledge that lifestyle change can be challenging but is a profound investment in future health and wellbeing. 
+        MANDATORY: State that if unsure how to start, please discuss these ideas with a health professional who can provide personalised assistance.
+        
+        USER DATA:
+        Established Assets (High Scores): 
+        ${strengthItems || "None identified yet."}
+        
+        Growth Opportunities (Lower Scores): 
+        ${focusItems || "None identified yet."}
 
-**Your Response:**
-1. Start with an encouraging introduction (2-3 sentences).
-2. Acknowledge their strengths with specific praise.
-3. For each focus area, provide 2-3 small, actionable first steps.
-4. Keep a warm, supportive, and professional tone.
-5. End by suggesting they consult a health professional if needed.
+        PILLAR CONTEXT:
+        - If 'Avoid Risks' is a growth area, mention that limiting alcohol significantly reduces community harm and avoiding tobacco protects long-term heart/lung health.
+        
+        Please provide the response in structured JSON format with these keys:
+        {
+            "intro": "A warm, 2-3 sentence opening statement.",
+            "strengths": [{"label": "Pillar Name", "analysis": "Positive commentary."}],
+            "steps": [{"label": "Pillar Name", "advice": ["Small actionable step 1", "Small actionable step 2"]}]
+        }`;
 
-Format your response in clear sections with headers. Be specific and practical.`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { responseMimeType: "application/json" }
+            })
+        });
 
-    // Call Google AI API
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [
-            {
-              role: 'user',
-              parts: [{ text: prompt }]
-            }
-          ]
-        })
-      }
-    );
+        const data = await response.json();
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Google AI API error:', errorData);
-      return { statusCode: 500, body: JSON.stringify({ error: 'AI service failed' }) };
+        if (!response.ok) {
+            return { statusCode: response.status, body: JSON.stringify(data) };
+        }
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify(data)
+        };
+
+    } catch (error) {
+        console.error("Function Execution Error:", error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: "The server encountered an error processing the assessment." })
+        };
     }
-
-    const result = await response.json();
-    const feedback = result.candidates?.?.content?.parts?.?.text || 'No response from AI';
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ feedback })
-    };
-
-  } catch (error) {
-    console.error('Error:', error);
-    return { statusCode: 500, body: JSON.stringify({ error: 'Server error' }) };
-  }
 };
