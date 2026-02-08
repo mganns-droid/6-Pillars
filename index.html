@@ -17,87 +17,31 @@
             --charcoal: #2F3E46;
             --slate-gray: #64748b;
         }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F8FAFC;
-            color: var(--charcoal);
-        }
-        .section-card {
-            background-color: white;
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
-        }
-        .pillar-card {
-             background-color: white;
-             border-radius: 1rem;
-             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
-             border: 1px solid #e2e8f0;
-             padding: 1.5rem;
-             display: flex;
-             flex-direction: column;
-             height: 100%;
-        }
-        .icon-background {
-            width: 48px;
-            height: 48px;
-            border-radius: 9999px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 0.75rem;
-        }
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100%;
-            height: 8px;
-            background: #e2e8f0;
-            border-radius: 9999px;
-            outline: none;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 24px;
-            height: 24px;
-            background: var(--teal);
-            cursor: pointer;
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .cta-button {
-            background-image: linear-gradient(90deg, var(--teal), var(--light-teal));
-            padding: 1.25rem 3rem;
-            box-shadow: 0 10px 20px -5px rgba(43, 179, 177, 0.4);
-            transition: all 0.2s ease;
-        }
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 24px -5px rgba(43, 179, 177, 0.5);
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: var(--charcoal); }
+        .section-card { background-color: white; border-radius: 1.5rem; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05); }
+        .pillar-card { background-color: white; border-radius: 1rem; border: 1px solid #e2e8f0; padding: 1.5rem; display: flex; flex-direction: column; height: 100%; }
+        .icon-background { width: 48px; height: 48px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 0.75rem; }
+        input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background: #e2e8f0; border-radius: 9999px; outline: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: var(--teal); cursor: pointer; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .cta-button { background-image: linear-gradient(90deg, var(--teal), var(--light-teal)); padding: 1.25rem 3rem; box-shadow: 0 10px 20px -5px rgba(43, 179, 177, 0.4); transition: all 0.2s ease; color: white; font-weight: bold; border-radius: 9999px; }
     </style>
 </head>
 <body>
 
     <div class="container mx-auto p-4 md:p-8 max-w-6xl space-y-10">
-        <!-- Header -->
         <header class="text-center py-4">
             <h1 class="text-3xl md:text-5xl font-bold tracking-tight" style="color: var(--teal);">Lifestyle Medicine Map</h1>
-            <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">An encouraging look at the foundations of your future health and wellbeing.</p>
+            <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">An encouraging exploration of the foundations for your future health and wellbeing.</p>
         </header>
 
-        <!-- Environment Context -->
         <section class="section-card p-6 md:p-10" style="background-color: var(--charcoal);">
             <h2 class="text-2xl font-bold text-center" style="color: var(--light-teal);">The Ground You Stand On</h2>
             <p class="mt-4 text-center max-w-3xl mx-auto text-slate-300 text-lg leading-relaxed">
                 Health is significantly influenced by our circumstances, such as housing, income, and community. 
-                Acknowledging these factors with compassion is a key step toward making choices that truly support your journey.
+                Acknowledging these factors with compassion is a key step toward making choices that support your unique journey.
             </p>
         </section>
 
-        <!-- Main Content -->
         <section class="section-card p-6 md:p-10">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-bold" style="color: var(--teal);">Your Lifestyle Pillars</h2>
@@ -114,26 +58,20 @@
                 <div id="additional-pillars-grid" class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"></div>
             </div>
 
-            <!-- Radar Chart -->
             <div class="py-12 border-y border-slate-50">
-                 <h2 class="text-3xl font-bold text-center mb-8" style="color: var(--teal);">Your Wellbeing Snapshot</h2>
                  <div class="w-full max-w-2xl mx-auto h-[450px]">
                     <canvas id="wellbeingChart"></canvas>
                 </div>
             </div>
 
-            <!-- Action Button -->
             <div class="mt-16 text-center">
-                <button id="get-advice-btn" class="cta-button text-white text-lg font-bold rounded-full">
+                <button id="get-advice-btn" class="cta-button text-lg">
                     Generate Your Personalised Summary
                 </button>
                 
                 <div id="advice-output" class="mt-16 text-left hidden border-t border-slate-100 pt-16">
                     <div id="spinner" class="hidden flex flex-col items-center py-12">
-                        <svg class="animate-spin h-12 w-12 text-teal-500 mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
+                        <svg class="animate-spin h-12 w-12 text-teal-500 mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                         <p class="text-slate-600 font-semibold text-lg">Synthesising your feedback...</p>
                     </div>
                     <div id="advice-content" class="space-y-12 pb-12"></div>
@@ -141,20 +79,13 @@
             </div>
         </section>
 
-        <!-- Footer -->
         <footer class="text-center py-12 border-t border-slate-200" style="color: var(--slate-gray);">
             <p class="font-bold">&copy; 2025 Psych and Lifestyle. All rights reserved.</p>
             <p class="mt-2"><a href="https://www.psychandlifestyle.com" target="_blank" class="text-teal-600 hover:underline">www.psychandlifestyle.com</a></p>
-            <div class="mt-8 max-w-3xl mx-auto px-4">
-                <p class="text-xs leading-relaxed italic opacity-75">
-                    Disclaimer: This tool is for educational purposes. Lifestyle changes can be rewarding yet challenging; 
-                    always consult with a health professional before making significant adjustments to your health routine.
-                </p>
-            </div>
         </footer>
     </div>
 
-   <script>
+    <script>
     document.addEventListener('DOMContentLoaded', () => {
         const corePillarsGrid = document.getElementById('core-pillars-grid');
         const additionalPillarsGrid = document.getElementById('additional-pillars-grid');
@@ -175,216 +106,178 @@
         };
 
         const pillars = [
-            { id: 'nourish', label: 'Nourish', question: 'Intake of whole, plant-predominant foods?', value: 5, icon: '🍎', description: "Focusing on minimally processed, whole foods.", anchor: '0 = Highly processed; 10 = Whole food focus', color: '#D9F2D9' },
-            { id: 'move', label: 'Move', question: 'How consistently are you active?', value: 5, icon: '🏃', description: "Finding daily movement that feels good and energising.", anchor: '0 = Sedentary; 10 = Consistently active', color: '#D6EEFB' },
-            { id: 'manageStress', label: 'Manage Stress', question: 'Efficacy of your relaxation strategies?', value: 5, icon: '🧘', description: "Using simple techniques to help your mind and body reset.", anchor: '0 = Feeling overwhelmed; 10 = Managing effectively', color: '#E6E4F9' },
-            { id: 'rest', label: 'Rest', question: 'Quality and duration of your sleep?', value: 5, icon: '😴', description: "Prioritising rest to allow your brain and body to recover.", anchor: '0 = Poor/Short; 10 = Deeply restorative', color: '#E2F0F7' },
-            { id: 'connect', label: 'Connect', question: 'Strength of your social support network?', value: 5, icon: '🤝', description: "Nurturing the relationships that make you feel understood.", anchor: '0 = Isolated; 10 = Very connected', color: '#FFE4D6' },
-            { id: 'avoidRisks', label: 'Avoid Risks', question: 'Mindfulness of risky substances?', value: 5, icon: '🚭', description: "Choosing to limit alcohol and avoid tobacco for future health.", anchor: '0 = High usage; 10 = Consistent avoidance', color: '#FAD9DC' },
-            { id: 'purpose', label: 'Purpose', question: 'Connection to your sense of meaning?', value: 5, icon: '🧭', description: "Living in alignment with your personal values.", isCore: false, anchor: '0 = Unclear direction; 10 = Purpose-driven', color: '#FAE7B5' },
-            { id: 'nature', label: 'Nature', question: 'Time spent in the natural world?', value: 5, icon: '🌳', description: "Getting outdoors to refresh your perspective.", isCore: false, anchor: '0 = Almost never; 10 = Daily engagement', color: '#DDEEE0' },
+            { id: 'nourish', label: 'Nourish', question: 'Whole-food intake?', value: 5, icon: '🍎', description: "Focusing on minimally processed, whole foods.", anchor: '0 = Processed; 10 = Whole foods', color: '#D9F2D9' },
+            { id: 'move', label: 'Move', question: 'Activity consistency?', value: 5, icon: '🏃', description: "Daily movement that feels energising.", anchor: '0 = Sedentary; 10 = Consistently active', color: '#D6EEFB' },
+            { id: 'manageStress', label: 'Manage Stress', question: 'Relaxation efficacy?', value: 5, icon: '🧘', description: "Simple techniques to help your body reset.", anchor: '0 = Overwhelmed; 10 = Managing well', color: '#E6E4F9' },
+            { id: 'rest', label: 'Rest', question: 'Sleep restorative quality?', value: 5, icon: '😴', description: "Prioritising rest to allow for recovery.", anchor: '0 = Poor; 10 = Restorative', color: '#E2F0F7' },
+            { id: 'connect', label: 'Connect', question: 'Social network strength?', value: 5, icon: '🤝', description: "Nurturing supportive relationships.", anchor: '0 = Isolated; 10 = Connected', color: '#FFE4D6' },
+            { id: 'avoidRisks', label: 'Avoid Risks', question: 'Substance mindfulness?', value: 5, icon: '🚭', description: "Limiting alcohol and avoiding tobacco.", anchor: '0 = High usage; 10 = Consistent avoidance', color: '#FAD9DC' },
+            { id: 'purpose', label: 'Purpose', question: 'Connection to meaning?', value: 5, icon: '🧭', description: "Living in alignment with your personal values.", isCore: false, anchor: '0 = Ambiguous; 10 = Purposeful', color: '#FAE7B5' },
+            { id: 'nature', label: 'Nature', question: 'Time spent outdoors?', value: 5, icon: '🌳', description: "Engaging with the natural world.", isCore: false, anchor: '0 = Rarely; 10 = Daily', color: '#DDEEE0' },
         ];
 
         function renderPillars() {
             pillars.forEach((p, i) => {
                 const html = `
                     <div class="pillar-card">
-                        <div class="flex-grow
-                                <div class="flex items-center mb-3">
-                                    <div class="icon-background" style="background-color: ${p.color};">
-                                        <span>${p.icon}</span>
-                                    </div>
-                                    <h3 class="text-xl font-bold ml-3 text-slate-800">${p.label}</h3>
-                                </div>
-                                <p class="text-sm text-slate-500 leading-relaxed">${p.description}</p>
+                        <div class="flex-grow">
+                            <div class="flex items-center mb-3">
+                                <div class="icon-background" style="background-color: ${p.color};"><span>${p.icon}</span></div>
+                                <h3 class="text-xl font-bold ml-3 text-slate-800">${p.label}</h3>
                             </div>
-                            <div class="mt-8 pt-5 border-t border-slate-100">
-                                <label class="block text-sm font-bold text-slate-700 mb-4">${p.question}</label>
-                                <div class="flex items-center gap-6">
-                                   <input type="range" min="0" max="10" value="${p.value}" data-index="${i}" class="w-full">
-                                   <span class="font-bold text-xl w-10 text-center text-teal-600">${p.value}</span>
-                                </div>
-                                <p class="text-[10px] mt-3 text-center text-slate-400 italic font-bold uppercase tracking-wider">${p.anchor}</p>
-                            </div>
+                            <p class="text-sm text-slate-500 leading-relaxed">${p.description}</p>
                         </div>
-                    `;
-                    if (p.isCore !== false) corePillarsGrid.innerHTML += html;
-                    else additionalPillarsGrid.innerHTML += html;
-                });
-            }
-
-            const chart = new Chart(document.getElementById('wellbeingChart'), {
-                type: 'radar',
-                data: {
-                    labels: pillars.map(p => p.label),
-                    datasets: [{
-                        data: pillars.map(p => p.value),
-                        backgroundColor: 'rgba(43, 179, 177, 0.2)',
-                        borderColor: '#2BB3B1',
-                        borderWidth: 4,
-                        pointBackgroundColor: '#2BB3B1',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            min: 0, max: 10,
-                            ticks: { display: false, stepSize: 2 },
-                            pointLabels: { font: { size: 14, weight: '700' }, color: '#475569' }
-                        }
-                    },
-                    plugins: { legend: { display: false } }
-                }
+                        <div class="mt-8 pt-5 border-t border-slate-100">
+                            <label class="block text-sm font-bold text-slate-700 mb-4">${p.question}</label>
+                            <div class="flex items-center gap-6">
+                               <input type="range" min="0" max="10" value="${p.value}" data-index="${i}" class="w-full">
+                               <span class="font-bold text-xl w-10 text-center text-teal-600">${p.value}</span>
+                            </div>
+                            <p class="text-[10px] mt-3 text-center text-slate-400 italic font-bold uppercase tracking-wider">${p.anchor}</p>
+                        </div>
+                    </div>`;
+                if (p.isCore !== false) corePillarsGrid.innerHTML += html;
+                else additionalPillarsGrid.innerHTML += html;
             });
+        }
 
-            document.body.addEventListener('input', (e) => {
-                if (e.target.type === 'range') {
-                    const idx = e.target.dataset.index;
-                    const val = parseInt(e.target.value);
-                    pillars[idx].value = val;
-                    e.target.nextElementSibling.textContent = val;
-                    chart.data.datasets[0].data[idx] = val;
-                    chart.update();
-                }
-            });
-
-            async function callGemini(prompt) {
-                const finalKey = apiKey || (typeof __apiKey !== 'undefined' ? __apiKey : "");
-                if (!finalKey) throw new Error("MISSING_KEY");
-
-                const model = "gemini-1.5-flash";
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${finalKey}`;
-                
-                const payload = {
-                    contents: [{ parts: [{ text: prompt }] }],
-                    generationConfig: {
-                        responseMimeType: "application/json",
-                        responseSchema: {
-                            type: "OBJECT",
-                            properties: {
-                                intro: { type: "STRING" },
-                                strengths: { type: "ARRAY", items: { type: "OBJECT", properties: { label: { type: "STRING" }, analysis: { type: "STRING" } } } },
-                                steps: { type: "ARRAY", items: { type: "OBJECT", properties: { label: { type: "STRING" }, advice: { type: "ARRAY", items: { type: "STRING" } }, clinicalNote: { type: "STRING" } } } }
-                            }
-                        }
-                    }
-                };
-
-                let delay = 1000;
-                for (let i = 0; i < 5; i++) {
-                    try {
-                        const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                        if (res.ok) {
-                            const data = await res.json();
-                            return JSON.parse(data.candidates[0].content.parts[0].text);
-                        }
-                    } catch (e) {}
-                    await new Promise(r => setTimeout(r, delay));
-                    delay *= 2;
-                }
-                throw new Error("API_FAIL");
-            }
-
-            getAdviceBtn.addEventListener('click', async () => {
-                adviceOutput.classList.remove('hidden');
-                adviceContent.innerHTML = '';
-                spinner.classList.remove('hidden');
-                getAdviceBtn.disabled = true;
-
-                const strengths = pillars.filter(p => p.value >= 7);
-                const focusAreas = pillars.filter(p => p.value <= 5);
-
-                const prompt = `
-                    Act as an encouraging and professional health coach from Psych and Lifestyle. 
-                    Provide positive, motivating feedback based on these results. 
-                    
-                    TONE AND CONTENT RULES:
-                    1. Tone must be warm, supportive, and positive.
-                    2. Use Australian English and spellings. Avoid colloquialisms.
-                    3. MANDATORY STATEMENT: Acknowledge that lifestyle change can be challenging, but emphasize that it is a profound investment in future health and wellbeing.
-                    4. MANDATORY STATEMENT: "If you are unsure how to start, please discuss these ideas with a health professional who can provide assistance."
-                    5. Frame lower scores as "Opportunities for Growth" rather than failures.
-                    
-                    DATA:
-                    Assets (High Scores): ${strengths.map(s => `${s.label} (${s.value}/10)`).join(', ')}
-                    Growth Areas: ${focusAreas.map(f => `${f.label} (${f.value}/10). Guideline context: ${guidelines[f.id]}`).join(', ')}
-
-                    Requirement for "Avoid Risks": Mention that choosing to limit alcohol reduces community harm significantly and avoid tobacco to protect long-term heart and lung health.
-                `;
-
-                try {
-                    const data = await callGemini(prompt);
-                    let html = `<p class="text-xl text-center font-medium italic text-slate-700 pb-8 border-b">"${data.intro}"</p>`;
-
-                    if (data.strengths.length) {
-                        html += `
-                            <div class="bg-green-50 border border-green-100 rounded-3xl p-8">
-                                <h3 class="text-2xl font-bold text-green-800 mb-6">Your Health Assets</h3>
-                                <div class="grid md:grid-cols-2 gap-4">
-                                    ${data.strengths.map(s => `
-                                        <div class="bg-white p-4 rounded-xl shadow-sm border border-green-50">
-                                            <strong class="text-green-700 block">${s.label}</strong>
-                                            <p class="text-green-900 text-sm mt-1">${s.analysis}</p>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            </div>`;
-                    }
-
-                    if (data.steps.length) {
-                        html += `<div class="space-y-10">`;
-                        data.steps.forEach(a => {
-                            html += `
-                                <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-10 shadow-sm">
-                                    <h3 class="text-2xl font-bold text-teal-800 mb-6">Growing Your Wellbeing: ${a.label}</h3>
-                                    <div class="space-y-4">
-                                        <p class="font-bold text-slate-800 text-sm uppercase tracking-wider">Small, Positive Steps:</p>
-                                        <ul class="grid md:grid-cols-2 gap-4">
-                                            ${a.advice.map(step => `
-                                                <li class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
-                                                    <span class="text-teal-500 text-xl">★</span>
-                                                    <span class="text-slate-700">${step}</span>
-                                                </li>
-                                            `).join('')}
-                                        </ul>
-                                    </div>
-                                    ${a.clinicalNote ? `<p class="mt-6 text-sm bg-amber-50 p-4 rounded-lg text-amber-900"><strong>A Note of Encouragement:</strong> ${a.clinicalNote}</p>` : ''}
-                                </div>`;
-                        });
-                        html += `</div>`;
-                    }
-
-                    html += `
-                        <div class="text-center p-8 bg-blue-50 border border-blue-100 rounded-3xl text-blue-900">
-                            <p class="text-lg font-semibold">Every positive choice is a step toward a healthier you.</p>
-                            <p class="mt-2">Remember, while lifestyle change can be challenging, it is a truly valuable investment in your future wellbeing. If you are unsure how to start, please discuss these ideas with a health professional who can provide assistance.</p>
-                        </div>`;
-
-                    adviceContent.innerHTML = html;
-                    adviceContent.scrollIntoView({ behavior: 'smooth' });
-                } catch (e) {
-                    let msg = "We couldn't generate your feedback right now. Please check your connection and try again.";
-                    if (e.message === "MISSING_KEY") msg = "API Key Required: To use this on your own website, you must provide a valid Google AI API key in the code (const apiKey = '...').";
-                    
-                    adviceContent.innerHTML = `
-                        <div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto">
-                            <h4 class="text-2xl font-bold mb-2">Technical Connection Issue</h4>
-                            <p class="font-medium">${msg}</p>
-                        </div>`;
-                } finally {
-                    spinner.classList.add('hidden');
-                    getAdviceBtn.disabled = false;
-                }
-            });
-
-            renderPillars();
+        const chart = new Chart(document.getElementById('wellbeingChart'), {
+            type: 'radar',
+            data: {
+                labels: pillars.map(p => p.label),
+                datasets: [{
+                    data: pillars.map(p => p.value),
+                    backgroundColor: 'rgba(43, 179, 177, 0.2)',
+                    borderColor: '#2BB3B1',
+                    borderWidth: 4,
+                    pointBackgroundColor: '#2BB3B1',
+                    pointRadius: 6
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 10, ticks: { display: false }, pointLabels: { font: { size: 14, weight: '700' }, color: '#475569' } } }, plugins: { legend: { display: false } } }
         });
+
+        document.body.addEventListener('input', (e) => {
+            if (e.target.type === 'range') {
+                const idx = e.target.dataset.index;
+                const val = parseInt(e.target.value);
+                pillars[idx].value = val;
+                e.target.nextElementSibling.textContent = val;
+                chart.data.datasets[0].data[idx] = val;
+                chart.update();
+            }
+        });
+
+        async function callGemini(prompt) {
+            const url = "/.netlify/functions/gemini";
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            intro: { type: "STRING" },
+                            strengths: { type: "ARRAY", items: { type: "OBJECT", properties: { label: { type: "STRING" }, analysis: { type: "STRING" } } } },
+                            steps: { type: "ARRAY", items: { type: "OBJECT", properties: { label: { type: "STRING" }, advice: { type: "ARRAY", items: { type: "STRING" } } } } }
+                        }
+                    }
+                }
+            };
+
+            const res = await fetch(url, { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload) 
+            });
+
+            if (!res.ok) throw new Error("API_FAIL");
+            const data = await res.json();
+            
+            // Handle case where AI might wrap JSON in markdown blocks
+            let text = data.candidates[0].content.parts[0].text;
+            if (text.startsWith("```")) {
+                text = text.replace(/```json|```/g, "").trim();
+            }
+            return JSON.parse(text);
+        }
+
+        getAdviceBtn.addEventListener('click', async () => {
+            adviceOutput.classList.remove('hidden');
+            adviceContent.innerHTML = '';
+            spinner.classList.remove('hidden');
+            getAdviceBtn.disabled = true;
+
+            const strengths = pillars.filter(p => p.value >= 7);
+            const focusAreas = pillars.filter(p => p.value <= 5);
+
+            const prompt = `Act as an encouraging health coach from Psych and Lifestyle. 
+            TONE: Warm, supportive, and professional. Use Australian English.
+            MANDATORY: Acknowledge that lifestyle change can be challenging but is a profound investment in future health and wellbeing. 
+            MANDATORY: State that if unsure how to start, please discuss these ideas with a health professional who can provide assistance.
+            Data: Assets: ${strengths.map(s => s.label).join(', ')}. Opportunities: ${focusAreas.map(f => f.label).join(', ')}.
+            Avoid Risks context: Limiting alcohol reduces community harm; avoid tobacco to protect long-term heart and lung health.`;
+
+            try {
+                const data = await callGemini(prompt);
+                let html = `<p class="text-xl text-center font-medium italic text-slate-700 pb-8 border-b">"${data.intro}"</p>`;
+
+                if (data.strengths?.length) {
+                    html += `
+                        <div class="bg-green-50 p-8 rounded-3xl mt-8">
+                            <h3 class="text-2xl font-bold text-green-800 mb-6">Your Foundations</h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                ${data.strengths.map(s => `
+                                    <div class="bg-white p-4 rounded-xl shadow-sm">
+                                        <strong class="text-green-700 block">${s.label}</strong>
+                                        <p class="text-green-900 text-sm mt-1">${s.analysis}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>`;
+                }
+
+                if (data.steps?.length) {
+                    html += `<div class="space-y-10 mt-8">`;
+                    data.steps.forEach(a => {
+                        html += `
+                            <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
+                                <h3 class="text-2xl font-bold text-teal-800 mb-6">Opportunity: ${a.label}</h3>
+                                <ul class="grid md:grid-cols-2 gap-4">
+                                    ${a.advice.map(step => `
+                                        <li class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
+                                            <span class="text-teal-500 font-bold">★</span>
+                                            <span class="text-slate-700">${step}</span>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>`;
+                    });
+                    html += `</div>`;
+                }
+
+                html += `
+                    <div class="text-center p-8 bg-blue-50 rounded-3xl mt-8 text-blue-900">
+                        <p class="text-lg font-semibold">Lifestyle change is a powerful investment in your future.</p>
+                        <p class="mt-2 leading-relaxed">While modification can be challenging, every small positive choice matters. If you are unsure how to start, please discuss these ideas with a health professional who can provide personalised assistance.</p>
+                    </div>`;
+                
+                adviceContent.innerHTML = html;
+                adviceContent.scrollIntoView({ behavior: 'smooth' });
+            } catch (e) {
+                adviceContent.innerHTML = `
+                    <div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto">
+                        <h4 class="text-2xl font-bold mb-2">Technical Connection Issue</h4>
+                        <p class="font-medium">The analysis engine is currently establishing a connection. If this persists, please ensure your Netlify environment variable 'GEMINI_API_KEY' has been added and the site has finished redeploying.</p>
+                    </div>`;
+            } finally {
+                spinner.classList.add('hidden');
+                getAdviceBtn.disabled = false;
+            }
+        });
+
+        renderPillars();
+    });
     </script>
 </body>
-
 </html>
