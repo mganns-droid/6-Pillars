@@ -37,7 +37,7 @@
         <section class="section-card p-6 md:p-10">
             <div id="core-pillars-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
             <div class="my-16 p-10 rounded-3xl" style="background-color: #F1F5F9;">
-                <div id="additional-pillars-grid" class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"></div>
+                <div id="additional-pillars-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"></div>
             </div>
             <div class="py-12 border-y border-slate-50">
                  <div class="w-full max-w-2xl mx-auto h-[450px]"><canvas id="wellbeingChart"></canvas></div>
@@ -106,56 +106,3 @@
                     const val = parseInt(e.target.value);
                     pillars[idx].value = val;
                     e.target.nextElementSibling.textContent = val;
-                    chart.data.datasets[0].data[idx] = val;
-                    chart.update();
-                }
-            });
-
-            getAdviceBtn.addEventListener('click', async () => {
-                adviceOutput.classList.remove('hidden');
-                adviceContent.innerHTML = '';
-                spinner.classList.remove('hidden');
-                getAdviceBtn.disabled = true;
-
-                const strengths = pillars.filter(p => p.value >= 7);
-                const focusAreas = pillars.filter(p => p.value <= 5);
-
-                const prompt = `Act as an encouraging health coach from Psych and Lifestyle. Provide Motivating feedback in Australian English.
-                MANDATORY: Acknowledge that lifestyle change is a profound investment in future health.
-                MANDATORY: State that if unsure how to start, please discuss these ideas with a health professional.
-                Current Results: ${pillars.map(p => p.label + ": " + p.value + "/10").join(", ")}`;
-
-                try {
-                    const response = await fetch("/.netlify/functions/gemini", { 
-                        method: 'POST', 
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt: prompt }) 
-                    });
-
-                    if (!response.ok) throw new Error("API Connection Error");
-                    const data = await response.json();
-                    
-                    let html = `<p class="text-xl text-center font-medium italic text-slate-700 pb-8 border-b">"${data.intro}"</p>`;
-                    if (data.strengths?.length) {
-                        html += `<div class="bg-green-50 p-8 rounded-3xl mt-8"><h3 class="text-2xl font-bold text-green-800 mb-6">Established Assets</h3><div class="grid md:grid-cols-2 gap-4">${data.strengths.map(s => `<div class="bg-white p-4 rounded-xl shadow-sm"><strong class="text-green-700 block">${s.label}</strong><p class="text-green-900 text-sm mt-1">${s.analysis}</p></div>`).join('')}</div></div>`;
-                    }
-                    if (data.steps?.length) {
-                        html += `<div class="space-y-10 mt-8">${data.steps.map(a => `<div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm"><h3 class="text-2xl font-bold text-teal-800 mb-6">Growth Opportunity: ${a.label}</h3><ul class="grid md:grid-cols-2 gap-4">${a.advice.map(step => `<li class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl"><span class="text-teal-500 font-bold">★</span><span class="text-slate-700">${step}</span></li>`).join('')}</ul></div>`).join('')}</div>`;
-                    }
-                    html += `<div class="text-center p-8 bg-blue-50 rounded-3xl mt-8 text-blue-900"><p class="text-lg font-semibold">Lifestyle change is a powerful investment in your future.</p><p class="mt-2 leading-relaxed">If you are unsure how to start, please discuss these ideas with a health professional.</p></div>`;
-
-                    adviceContent.innerHTML = html;
-                    adviceContent.scrollIntoView({ behavior: 'smooth' });
-                } catch (e) {
-                    adviceContent.innerHTML = `<div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto"><h4 class="text-2xl font-bold mb-2">Technical Connection Issue</h4><p class="font-medium">The analysis engine encountered a mismatch. Please ensure you have triggered "Clear cache and deploy site" in the Netlify dashboard to register the latest code updates.</p></div>`;
-                } finally {
-                    spinner.classList.add('hidden');
-                    getAdviceBtn.disabled = false;
-                }
-            });
-
-            renderPillars();
-        });
-    </script>
-</body>
-</html>
