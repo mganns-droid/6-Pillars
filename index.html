@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lifestyle Medicine Assessment | Psych and Lifestyle</title>
+    <!-- Core External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,20 +25,28 @@
     <div class="container mx-auto p-4 md:p-8 max-w-6xl space-y-10">
         <header class="text-center py-4">
             <h1 class="text-3xl md:text-5xl font-bold tracking-tight" style="color: var(--teal);">Lifestyle Medicine Map</h1>
-            <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">An encouraging look at the foundations of your future health and wellbeing.</p>
+            <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">An encouraging exploration of the foundations for your future health and wellbeing.</p>
         </header>
 
         <section class="section-card p-6 md:p-10" style="background-color: var(--charcoal);">
             <h2 class="text-2xl font-bold text-center" style="color: var(--light-teal);">The Ground You Stand On</h2>
             <p class="mt-4 text-center max-w-3xl mx-auto text-slate-300 text-lg leading-relaxed">
-                Health is significantly influenced by our circumstances. Acknowledging these factors with compassion is a key step toward making choices that support your unique journey.
+                Health outcomes are significantly influenced by life circumstances. Acknowledging these factors with compassion is a key step toward making choices that support your unique journey.
             </p>
         </section>
 
         <section class="section-card p-6 md:p-10">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold" style="color: var(--teal);">Your Lifestyle Pillars</h2>
+                 <p class="mt-2 text-gray-500 text-lg">A subjective assessment across core health domains.</p>
+            </div>
+            
             <div id="core-pillars-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
             <div class="my-16 p-10 rounded-3xl" style="background-color: #F1F5F9;">
-                <div id="additional-pillars-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"></div>
+                <div class="text-center">
+                    <h2 class="text-2xl font-bold" style="color: var(--teal);">Connection & Meaning</h2>
+                </div>
+                <div id="additional-pillars-grid" class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"></div>
             </div>
             <div class="py-12 border-y border-slate-50">
                  <div class="w-full max-w-2xl mx-auto h-[450px]"><canvas id="wellbeingChart"></canvas></div>
@@ -54,6 +63,11 @@
                 </div>
             </div>
         </section>
+
+        <footer class="text-center py-12 border-t border-slate-200" style="color: var(--slate-gray);">
+            <p class="font-bold">&copy; 2025 Psych and Lifestyle. All rights reserved.</p>
+            <p class="mt-2"><a href="https://www.psychandlifestyle.com" target="_blank" class="text-teal-600 hover:underline">www.psychandlifestyle.com</a></p>
+        </footer>
     </div>
 
     <script>
@@ -71,9 +85,9 @@
             { id: 'manageStress', label: 'Manage Stress', question: 'Relaxation efficacy?', value: 5, icon: '🧘', description: "Simple techniques to help your body reset.", color: '#E6E4F9' },
             { id: 'rest', label: 'Rest', question: 'Sleep restorative quality?', value: 5, icon: '😴', description: "Prioritising rest to allow for recovery.", color: '#E2F0F7' },
             { id: 'connect', label: 'Connect', question: 'Social network strength?', value: 5, icon: '🤝', description: "Nurturing supportive relationships.", color: '#FFE4D6' },
-            { id: 'avoidRisks', label: 'Avoid Risks', question: 'Substance mindfulness?', value: 5, icon: '🚭', description: "Limiting alcohol and tobacco.", color: '#FAD9DC' },
+            { id: 'avoidRisks', label: 'Avoid Risks', question: 'Substance mindfulness?', value: 5, icon: '🚭', description: "Limiting alcohol and tobacco for future health.", color: '#FAD9DC' },
             { id: 'purpose', label: 'Purpose', question: 'Connection to meaning?', value: 5, icon: '🧭', description: "Living in alignment with values.", isCore: false, color: '#FAE7B5' },
-            { id: 'nature', label: 'Nature', question: 'Time spent outdoors?', value: 5, icon: '🌳', description: "Engaging with the natural world.", isCore: false, color: '#DDEEE0' },
+            { id: 'nature', label: 'Nature', question: 'Time spent outdoors?', value: 5, icon: '🌳', description: "Engaging with the natural world regularly.", isCore: false, color: '#DDEEE0' },
         ];
 
         function renderPillars() {
@@ -127,11 +141,9 @@
                 if (!response.ok) throw new Error("Server failure.");
                 const data = await response.json(); 
 
-                if (!data || !data.intro) throw new Error("Invalid response format.");
-
                 let html = `<p class="text-xl text-center font-medium italic text-slate-700 pb-8 border-b">"${data.intro}"</p>`;
                 if (data.strengths?.length) {
-                    html += `<div class="bg-green-50 p-8 rounded-3xl mt-8"><h3 class="text-2xl font-bold text-green-800 mb-6">Established Assets</h3><div class="grid md:grid-cols-2 gap-4">${data.strengths.map(s => `<div class="bg-white p-4 rounded-xl shadow-sm"><strong class="text-green-700 block">${s.label}</strong><p class="text-green-900 text-sm mt-1">${s.analysis}</p></div>`).join('')}</div></div>`;
+                    html += `<div class="bg-green-50 p-8 rounded-3xl mt-8"><h3 class="text-2xl font-bold text-green-800 mb-6">Established Foundations</h3><div class="grid md:grid-cols-2 gap-4">${data.strengths.map(s => `<div class="bg-white p-4 rounded-xl shadow-sm"><strong class="text-green-700 block">${s.label}</strong><p class="text-green-900 text-sm mt-1">${s.analysis}</p></div>`).join('')}</div></div>`;
                 }
                 if (data.steps?.length) {
                     html += `<div class="space-y-10 mt-8">${data.steps.map(a => `<div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm"><h3 class="text-2xl font-bold text-teal-800 mb-6">Growth Opportunity: ${a.label}</h3><ul class="grid md:grid-cols-2 gap-4">${a.advice.map(step => `<li class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl"><span class="text-teal-500 font-bold">★</span><span class="text-slate-700">${step}</span></li>`).join('')}</ul></div>`).join('')}</div>`;
@@ -141,8 +153,7 @@
                 adviceContent.innerHTML = html;
                 adviceContent.scrollIntoView({ behavior: 'smooth' });
             } catch (e) {
-                console.error(e);
-                adviceContent.innerHTML = `<div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto"><h4 class="text-2xl font-bold mb-2">Technical Connection Issue</h4><p class="font-medium">The analysis engine encountered a mismatch. Please ensure you have triggered "Clear cache and deploy site" in the Netlify dashboard to register the latest code updates.</p></div>`;
+                adviceContent.innerHTML = `<div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto"><h4 class="text-2xl font-bold mb-2">Technical Connection Issue</h4><p class="font-medium">The analysis engine is currently finishing its setup. Please refresh the page and try again in 1 minute.</p></div>`;
             } finally {
                 spinner.classList.add('hidden');
                 getAdviceBtn.disabled = false;
