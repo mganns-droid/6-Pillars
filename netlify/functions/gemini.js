@@ -1,40 +1,20 @@
 const fetch = require('node-fetch');
 
-/**
- * Netlify Function: gemini.js
- * Location: netlify/functions/gemini.js
- */
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
   try {
-    const { ratings } = JSON.parse(event.body);
+    const { prompt } = JSON.parse(event.body);
     const apiKey = process.env.GEMINI_API_KEY;
-    
+
     if (!apiKey) {
       return { 
         statusCode: 500, 
-        body: JSON.stringify({ error: 'GEMINI_API_KEY not found in dashboard.' }) 
+        body: JSON.stringify({ error: 'GEMINI_API_KEY not configured.' }) 
       };
     }
-
-    const strengthItems = ratings.filter(r => r.value >= 7).map(r => `* ${r.label} (${r.value}/10)`).join('\n');
-    const focusItems = ratings.filter(r => r.value <= 5).map(r => `* ${r.label} (${r.value}/10)`).join('\n');
-
-    const prompt = `Act as an encouraging health coach from Psych and Lifestyle. Use Australian English.
-    Provide a professional, motivating summary of these assessment results.
-    
-    MANDATORY STATEMENTS:
-    1. Acknowledge that lifestyle change can be challenging but is a profound investment in future health.
-    2. State that if unsure how to start, the user should discuss these ideas with a health professional.
-    
-    DATA:
-    Established Assets: ${strengthItems || "None yet identified."}
-    Growth Opportunities: ${focusItems || "None yet identified."}
-    
-    Return ONLY a JSON object with these keys: "intro", "strengths" (array of {label, analysis}), "steps" (array of {label, advice[]}).`;
 
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
@@ -43,24 +23,37 @@ exports.handler = async (event) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { responseMimeType: "application/json" }
+          generationConfig: { 
+            responseMimeType: "application/json",
+            responseSchema: {
+                type: "OBJECT",
+                properties: {
+                    intro: { type: "STRING" },
+                    strengths: { type: "ARRAY", items: { type: "OBJECT", properties: { label: { type: "STRING" }, analysis: { type: "STRING" } } } },
+                    steps: { type: "ARRAY", items: { type: "OBJECT", properties: { label: { type: "STRING" }, advice: { type: "ARRAY", items: { type: "STRING" } } } } }
+                }
+            }
+          }
         })
       }
     );
 
     const result = await response.json();
-    let feedbackText = result.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+    let text = result.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
     
-    // Remove potential markdown code blocks to ensure clean JSON parsing
-    feedbackText = feedbackText.replace(/```json|```/g, "").trim();
+    // Safety check to strip markdown wrapping if the model provides it
+    text = text.replace(/```json|```/g, "").trim();
 
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
-      body: feedbackText 
+      body: text
     };
-
   } catch (error) {
     return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
   }
 };
+
+2.  **Netlify Deployment**: After committing these changes to GitHub, go to the **Netlify Deploys** tab. Click **Trigger deploy** and select **Clear cache and deploy site**. This ensures the server-side environment is fully reset with the new code logic.
+
+The expert panel is confident that these synchronised changes will resolve the data parsing errors and restore full functionality to your Lifestyle Medicine tool.
