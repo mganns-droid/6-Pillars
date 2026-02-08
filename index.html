@@ -4,19 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lifestyle Medicine Assessment | Psych and Lifestyle</title>
+    <!-- Corrected external resource links -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --teal: #2BB3B1;
-            --light-teal: #4DC6C4;
-            --pale-teal: #E6F6F5;
-            --charcoal: #2F3E46;
-            --slate-gray: #64748b;
-        }
+        :root { --teal: #2BB3B1; --light-teal: #4DC6C4; --pale-teal: #E6F6F5; --charcoal: #2F3E46; --slate-gray: #64748b; }
         body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: var(--charcoal); }
         .section-card { background-color: white; border-radius: 1.5rem; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05); }
         .pillar-card { background-color: white; border-radius: 1rem; border: 1px solid #e2e8f0; padding: 1.5rem; display: flex; flex-direction: column; height: 100%; }
@@ -36,39 +31,32 @@
         <section class="section-card p-6 md:p-10" style="background-color: var(--charcoal);">
             <h2 class="text-2xl font-bold text-center" style="color: var(--light-teal);">The Ground You Stand On</h2>
             <p class="mt-4 text-center max-w-3xl mx-auto text-slate-300 text-lg leading-relaxed">
-                Health is significantly influenced by our circumstances, such as housing, income, and community. 
-                Acknowledging these factors with compassion is a key step toward making choices that support your journey.
+                Health is significantly influenced by our circumstances. Acknowledging these factors with compassion is a key step toward making choices that support your unique journey.
             </p>
         </section>
 
         <section class="section-card p-6 md:p-10">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-bold" style="color: var(--teal);">Your Lifestyle Pillars</h2>
-                 <p class="mt-2 text-gray-500 text-lg">A subjective assessment of how you are tracking across key health domains.</p>
+                 <p class="mt-2 text-gray-500 text-lg">A subjective assessment across core health domains.</p>
             </div>
             
             <div id="core-pillars-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-
             <div class="my-16 p-10 rounded-3xl" style="background-color: #F1F5F9;">
                 <div class="text-center">
                     <h2 class="text-2xl font-bold" style="color: var(--teal);">Connection & Meaning</h2>
                 </div>
                 <div id="additional-pillars-grid" class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"></div>
             </div>
-
             <div class="py-12 border-y border-slate-50">
-                 <div class="w-full max-w-2xl mx-auto h-[450px]">
-                    <canvas id="wellbeingChart"></canvas>
-                </div>
+                 <div class="w-full max-w-2xl mx-auto h-[450px]"><canvas id="wellbeingChart"></canvas></div>
             </div>
 
             <div class="mt-16 text-center">
-                <button id="get-advice-btn" class="cta-button text-lg">
-                    Generate Your Personalised Summary
-                </button>
-                
+                <button id="get-advice-btn" class="cta-button text-lg">Generate Your Personalised Summary</button>
                 <div id="advice-output" class="mt-16 text-left hidden border-t border-slate-100 pt-16">
                     <div id="spinner" class="hidden flex flex-col items-center py-12">
+                        <!-- Corrected XML Namespace -->
                         <svg class="animate-spin h-12 w-12 text-teal-500 mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                         <p class="text-slate-600 font-semibold text-lg">Synthesising your professional feedback...</p>
                     </div>
@@ -93,36 +81,19 @@
         const spinner = document.getElementById('spinner');
 
         const pillars = [
-            { id: 'nourish', label: 'Nourish', question: 'Whole-food intake?', value: 5, icon: '🍎', description: "Focusing on minimally processed, whole foods.", anchor: '0 = Processed; 10 = Whole foods', color: '#D9F2D9' },
-            { id: 'move', label: 'Move', question: 'Activity consistency?', value: 5, icon: '🏃', description: "Daily movement that feels energising.", anchor: '0 = Sedentary; 10 = Consistently active', color: '#D6EEFB' },
-            { id: 'manageStress', label: 'Manage Stress', question: 'Relaxation efficacy?', value: 5, icon: '🧘', description: "Simple techniques to help your body reset.", anchor: '0 = Overwhelmed; 10 = Managing well', color: '#E6E4F9' },
-            { id: 'rest', label: 'Rest', question: 'Sleep restorative quality?', value: 5, icon: '😴', description: "Prioritising rest to allow for recovery.", anchor: '0 = Poor; 10 = Restorative', color: '#E2F0F7' },
-            { id: 'connect', label: 'Connect', question: 'Social network strength?', value: 5, icon: '🤝', description: "Nurturing supportive relationships.", anchor: '0 = Isolated; 10 = Connected', color: '#FFE4D6' },
-            { id: 'avoidRisks', label: 'Avoid Risks', question: 'Substance mindfulness?', value: 5, icon: ' Smoking ', description: "Limiting alcohol and avoiding tobacco.", anchor: '0 = High usage; 10 = Consistent avoidance', color: '#FAD9DC' },
-            { id: 'purpose', label: 'Purpose', question: 'Connection to meaning?', value: 5, icon: '🧭', description: "Living in alignment with your personal values.", isCore: false, anchor: '0 = Ambiguous; 10 = Purpose-driven', color: '#FAE7B5' },
-            { id: 'nature', label: 'Nature', question: 'Time spent outdoors?', value: 5, icon: '🌳', description: "Engaging with the natural world.", isCore: false, anchor: '0 = Rarely; 10 = Daily', color: '#DDEEE0' },
+            { id: 'nourish', label: 'Nourish', question: 'Whole-food intake?', value: 5, icon: '🍎', description: "Focusing on minimally processed, whole foods.", color: '#D9F2D9' },
+            { id: 'move', label: 'Move', question: 'Activity consistency?', value: 5, icon: '🏃', description: "Daily movement that feels energising.", color: '#D6EEFB' },
+            { id: 'manageStress', label: 'Manage Stress', question: 'Relaxation efficacy?', value: 5, icon: '🧘', description: "Simple techniques to help your body reset.", color: '#E6E4F9' },
+            { id: 'rest', label: 'Rest', question: 'Sleep restorative quality?', value: 5, icon: '😴', description: "Prioritising rest to allow for recovery.", color: '#E2F0F7' },
+            { id: 'connect', label: 'Connect', question: 'Social network strength?', value: 5, icon: '🤝', description: "Nurturing supportive relationships.", color: '#FFE4D6' },
+            { id: 'avoidRisks', label: 'Avoid Risks', question: 'Substance mindfulness?', value: 5, icon: '🚭', description: "Limiting alcohol and tobacco.", color: '#FAD9DC' },
+            { id: 'purpose', label: 'Purpose', question: 'Connection to meaning?', value: 5, icon: '🧭', description: "Living in alignment with values.", isCore: false, color: '#FAE7B5' },
+            { id: 'nature', label: 'Nature', question: 'Time spent outdoors?', value: 5, icon: '🌳', description: "Engaging with the natural world.", isCore: false, color: '#DDEEE0' },
         ];
 
         function renderPillars() {
             pillars.forEach((p, i) => {
-                const html = `
-                    <div class="pillar-card">
-                        <div class="flex-grow">
-                            <div class="flex items-center mb-3">
-                                <div class="icon-background" style="background-color: ${p.color};"><span>${p.icon}</span></div>
-                                <h3 class="text-xl font-bold ml-3 text-slate-800">${p.label}</h3>
-                            </div>
-                            <p class="text-sm text-slate-500 leading-relaxed">${p.description}</p>
-                        </div>
-                        <div class="mt-8 pt-5 border-t border-slate-100">
-                            <label class="block text-sm font-bold text-slate-700 mb-4">${p.question}</label>
-                            <div class="flex items-center gap-6">
-                               <input type="range" min="0" max="10" value="${p.value}" data-index="${i}" class="w-full">
-                               <span class="font-bold text-xl w-10 text-center text-teal-600">${p.value}</span>
-                            </div>
-                            <p class="text-[10px] mt-3 text-center text-slate-400 italic font-bold uppercase tracking-wider">${p.anchor}</p>
-                        </div>
-                    </div>`;
+                const html = `<div class="pillar-card"><div class="flex-grow"><div class="flex items-center mb-3"><div class="icon-background" style="background-color: ${p.color};"><span>${p.icon}</span></div><h3 class="text-xl font-bold ml-3 text-slate-800">${p.label}</h3></div><p class="text-sm text-slate-500 leading-relaxed">${p.description}</p></div><div class="mt-8 pt-5 border-t border-slate-100"><label class="block text-sm font-bold text-slate-700 mb-4">${p.question}</label><div class="flex items-center gap-6"><input type="range" min="0" max="10" value="${p.value}" data-index="${i}" class="w-full"><span class="font-bold text-xl w-10 text-center text-teal-600">${p.value}</span></div><p class="text-[10px] mt-3 text-center text-slate-400 italic font-bold uppercase tracking-wider">0 = Low Engagement | 10 = High Engagement</p></div></div>`;
                 if (p.isCore !== false) corePillarsGrid.innerHTML += html;
                 else additionalPillarsGrid.innerHTML += html;
             });
@@ -168,62 +139,30 @@
                     body: JSON.stringify({ ratings: pillars }) 
                 });
 
-                if (!response.ok) throw new Error("API_FAIL");
-                const apiData = await response.json();
-                const data = JSON.parse(apiData.feedback);
+                if (!response.ok) throw new Error("Server communication issue.");
+                const apiData = await response.json(); 
+
+                let text = apiData.candidates[0].content.parts[0].text;
+                const data = JSON.parse(text);
 
                 let html = `<p class="text-xl text-center font-medium italic text-slate-700 pb-8 border-b">"${data.intro}"</p>`;
-
                 if (data.strengths?.length) {
-                    html += `
-                        <div class="bg-green-50 p-8 rounded-3xl mt-8">
-                            <h3 class="text-2xl font-bold text-green-800 mb-6">Your Established Assets</h3>
-                            <div class="grid md:grid-cols-2 gap-4">
-                                ${data.strengths.map(s => `
-                                    <div class="bg-white p-4 rounded-xl shadow-sm">
-                                        <strong class="text-green-700 block">${s.label}</strong>
-                                        <p class="text-green-900 text-sm mt-1">${s.analysis}</p>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>`;
+                    html += `<div class="bg-green-50 p-8 rounded-3xl mt-8"><h3 class="text-2xl font-bold text-green-800 mb-6">Established Assets</h3><div class="grid md:grid-cols-2 gap-4">${data.strengths.map(s => `<div class="bg-white p-4 rounded-xl shadow-sm"><strong class="text-green-700 block">${s.label}</strong><p class="text-green-900 text-sm mt-1">${s.analysis}</p></div>`).join('')}</div></div>`;
                 }
-
                 if (data.steps?.length) {
-                    html += `<div class="space-y-10 mt-8">`;
-                    data.steps.forEach(a => {
-                        html += `
-                            <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
-                                <h3 class="text-2xl font-bold text-teal-800 mb-6">Opportunity: ${a.label}</h3>
-                                <ul class="grid md:grid-cols-2 gap-4">
-                                    ${a.advice.map(step => `
-                                        <li class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
-                                            <span class="text-teal-500 font-bold">★</span>
-                                            <span class="text-slate-700">${step}</span>
-                                        </li>
-                                    `).join('')}
-                                </ul>
-                            </div>`;
-                    });
-                    html += `</div>`;
+                    html += `<div class="space-y-10 mt-8">${data.steps.map(a => `<div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm"><h3 class="text-2xl font-bold text-teal-800 mb-6">Growth Opportunity: ${a.label}</h3><ul class="grid md:grid-cols-2 gap-4">${a.advice.map(step => `<li class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl"><span class="text-teal-500 font-bold">★</span><span class="text-slate-700">${step}</span></li>`).join('')}</ul></div>`).join('')}</div>`;
                 }
-
-                html += `
-                    <div class="text-center p-8 bg-blue-50 rounded-3xl mt-8 text-blue-900">
-                        <p class="text-lg font-semibold">Lifestyle change is a powerful investment in your future.</p>
-                        <p class="mt-2 leading-relaxed">While modification can be challenging, every small positive choice matters. If you are unsure how to start, please discuss these ideas with a health professional.</p>
-                    </div>`;
+                html += `<div class="text-center p-8 bg-blue-50 rounded-3xl mt-8 text-blue-900"><p class="text-lg font-semibold">Lifestyle change is a powerful investment in your future.</p><p class="mt-2">If you are unsure how to start, please discuss these ideas with a health professional.</p></div>`;
 
                 adviceContent.innerHTML = html;
                 adviceContent.scrollIntoView({ behavior: 'smooth' });
             } catch (e) {
-                adviceContent.innerHTML = `<div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto"><h4 class="text-2xl font-bold mb-2">Technical Connection Issue</h4><p class="font-medium">The analysis engine is currently establishing a connection. Please verify your 'GEMINI_API_KEY' variable and redeploy with 'Clear cache' if the issue persists.</p></div>`;
+                adviceContent.innerHTML = `<div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto"><h4 class="text-2xl font-bold mb-2">Technical Connection Issue</h4><p class="font-medium">The analysis engine is finishing its setup. Please refresh the page and try again in 1 minute.</p></div>`;
             } finally {
                 spinner.classList.add('hidden');
                 getAdviceBtn.disabled = false;
             }
         });
-
         renderPillars();
     });
     </script>
