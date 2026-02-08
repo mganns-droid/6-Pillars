@@ -37,15 +37,14 @@
         <section class="section-card p-6 md:p-10" style="background-color: var(--charcoal);">
             <h2 class="text-2xl font-bold text-center" style="color: var(--light-teal);">The Ground You Stand On</h2>
             <p class="mt-4 text-center max-w-3xl mx-auto text-slate-300 text-lg leading-relaxed">
-                Health is significantly influenced by our circumstances, such as housing, income, and community. 
-                Acknowledging these factors with compassion is a key step toward making choices that support your unique journey.
+                Health outcomes are significantly influenced by life circumstances. Acknowledging these factors with compassion is a key step toward making choices that support your unique journey.
             </p>
         </section>
 
         <section class="section-card p-6 md:p-10">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-bold" style="color: var(--teal);">Your Lifestyle Pillars</h2>
-                 <p class="mt-2 text-gray-500 text-lg">A subjective assessment of how you are tracking across key health domains.</p>
+                 <p class="mt-2 text-gray-500 text-lg">A subjective assessment across core health domains.</p>
             </div>
             
             <div id="core-pillars-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
@@ -53,7 +52,6 @@
             <div class="my-16 p-10 rounded-3xl" style="background-color: #F1F5F9;">
                 <div class="text-center">
                     <h2 class="text-2xl font-bold" style="color: var(--teal);">Connection & Meaning</h2>
-                    <p class="mt-2 text-gray-500">How we relate to our environment and our sense of purpose.</p>
                 </div>
                 <div id="additional-pillars-grid" class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"></div>
             </div>
@@ -72,7 +70,7 @@
                 <div id="advice-output" class="mt-16 text-left hidden border-t border-slate-100 pt-16">
                     <div id="spinner" class="hidden flex flex-col items-center py-12">
                         <svg class="animate-spin h-12 w-12 text-teal-500 mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        <p class="text-slate-600 font-semibold text-lg">Synthesising your feedback...</p>
+                        <p class="text-slate-600 font-semibold text-lg">Synthesising your professional feedback...</p>
                     </div>
                     <div id="advice-content" class="space-y-12 pb-12"></div>
                 </div>
@@ -94,26 +92,15 @@
         const adviceContent = document.getElementById('advice-content');
         const spinner = document.getElementById('spinner');
 
-        const guidelines = {
-            move: "Australian Physical Activity Guidelines recommend 150-300 mins of moderate activity weekly.",
-            nourish: "Australian Dietary Guidelines recommend 5 serves of vegetables and 2 serves of fruit daily.",
-            rest: "Adults generally require 7 to 9 hours of restorative sleep for optimal health.",
-            avoidRisks: "NHMRC guidelines recommend no more than 10 standard drinks per week and no more than 4 in one day.",
-            connect: "Social connection is a fundamental human need and a key pillar of mental health.",
-            manageStress: "Active stress management helps balance the body's physiological responses.",
-            purpose: "Having a sense of meaning is linked to improved health outcomes and longevity.",
-            nature: "Regular connection with the natural world is shown to lower stress and improve mood."
-        };
-
         const pillars = [
-            { id: 'nourish', label: 'Nourish', question: 'Whole-food intake?', value: 5, icon: '🍎', description: "Focusing on minimally processed, whole foods.", anchor: '0 = Processed; 10 = Whole foods', color: '#D9F2D9' },
-            { id: 'move', label: 'Move', question: 'Activity consistency?', value: 5, icon: '🏃', description: "Daily movement that feels energising.", anchor: '0 = Sedentary; 10 = Consistently active', color: '#D6EEFB' },
-            { id: 'manageStress', label: 'Manage Stress', question: 'Relaxation efficacy?', value: 5, icon: '🧘', description: "Simple techniques to help your body reset.", anchor: '0 = Overwhelmed; 10 = Managing well', color: '#E6E4F9' },
-            { id: 'rest', label: 'Rest', question: 'Sleep restorative quality?', value: 5, icon: '😴', description: "Prioritising rest to allow for recovery.", anchor: '0 = Poor; 10 = Restorative', color: '#E2F0F7' },
-            { id: 'connect', label: 'Connect', question: 'Social network strength?', value: 5, icon: '🤝', description: "Nurturing supportive relationships.", anchor: '0 = Isolated; 10 = Connected', color: '#FFE4D6' },
-            { id: 'avoidRisks', label: 'Avoid Risks', question: 'Substance mindfulness?', value: 5, icon: '🚭', description: "Limiting alcohol and avoiding tobacco.", anchor: '0 = High usage; 10 = Consistent avoidance', color: '#FAD9DC' },
-            { id: 'purpose', label: 'Purpose', question: 'Connection to meaning?', value: 5, icon: '🧭', description: "Living in alignment with your personal values.", isCore: false, anchor: '0 = Ambiguous; 10 = Purposeful', color: '#FAE7B5' },
-            { id: 'nature', label: 'Nature', question: 'Time spent outdoors?', value: 5, icon: '🌳', description: "Engaging with the natural world.", isCore: false, anchor: '0 = Rarely; 10 = Daily', color: '#DDEEE0' },
+            { id: 'nourish', label: 'Nourish', question: 'Whole-food intake?', value: 5, icon: '🍎', description: "Focusing on minimally processed, whole foods.", color: '#D9F2D9' },
+            { id: 'move', label: 'Move', question: 'Activity consistency?', value: 5, icon: '🏃', description: "Daily movement that feels energising.", color: '#D6EEFB' },
+            { id: 'manageStress', label: 'Manage Stress', question: 'Relaxation efficacy?', value: 5, icon: '🧘', description: "Simple techniques to help your body reset.", color: '#E6E4F9' },
+            { id: 'rest', label: 'Rest', question: 'Sleep restorative quality?', value: 5, icon: '😴', description: "Prioritising rest to allow for recovery.", color: '#E2F0F7' },
+            { id: 'connect', label: 'Connect', question: 'Social network strength?', value: 5, icon: '🤝', description: "Nurturing supportive relationships.", color: '#FFE4D6' },
+            { id: 'avoidRisks', label: 'Avoid Risks', question: 'Substance mindfulness?', value: 5, icon: '🚭', description: "Limiting alcohol and avoiding tobacco.", color: '#FAD9DC' },
+            { id: 'purpose', label: 'Purpose', question: 'Connection to meaning?', value: 5, icon: '🧭', description: "Living in alignment with your personal values.", isCore: false, color: '#FAE7B5' },
+            { id: 'nature', label: 'Nature', question: 'Time spent outdoors?', value: 5, icon: '🌳', description: "Engaging with the natural world.", isCore: false, color: '#DDEEE0' },
         ];
 
         function renderPillars() {
@@ -133,7 +120,7 @@
                                <input type="range" min="0" max="10" value="${p.value}" data-index="${i}" class="w-full">
                                <span class="font-bold text-xl w-10 text-center text-teal-600">${p.value}</span>
                             </div>
-                            <p class="text-[10px] mt-3 text-center text-slate-400 italic font-bold uppercase tracking-wider">${p.anchor}</p>
+                            <p class="text-[10px] mt-3 text-center text-slate-400 italic font-bold uppercase tracking-wider">0 = Low Engagement | 10 = High Engagement</p>
                         </div>
                     </div>`;
                 if (p.isCore !== false) corePillarsGrid.innerHTML += html;
@@ -168,64 +155,32 @@
             }
         });
 
-        async function callGemini(prompt) {
-            const url = "/.netlify/functions/gemini";
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "OBJECT",
-                        properties: {
-                            intro: { type: "STRING" },
-                            strengths: { type: "ARRAY", items: { type: "OBJECT", properties: { label: { type: "STRING" }, analysis: { type: "STRING" } } } },
-                            steps: { type: "ARRAY", items: { type: "OBJECT", properties: { label: { type: "STRING" }, advice: { type: "ARRAY", items: { type: "STRING" } } } } }
-                        }
-                    }
-                }
-            };
-
-            const res = await fetch(url, { 
-                method: 'POST', 
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload) 
-            });
-
-            if (!res.ok) throw new Error("API_FAIL");
-            const data = await res.json();
-            
-            // Handle case where AI might wrap JSON in markdown blocks
-            let text = data.candidates[0].content.parts[0].text;
-            if (text.startsWith("```")) {
-                text = text.replace(/```json|```/g, "").trim();
-            }
-            return JSON.parse(text);
-        }
-
         getAdviceBtn.addEventListener('click', async () => {
             adviceOutput.classList.remove('hidden');
             adviceContent.innerHTML = '';
             spinner.classList.remove('hidden');
             getAdviceBtn.disabled = true;
 
-            const strengths = pillars.filter(p => p.value >= 7);
-            const focusAreas = pillars.filter(p => p.value <= 5);
-
-            const prompt = `Act as an encouraging health coach from Psych and Lifestyle. 
-            TONE: Warm, supportive, and professional. Use Australian English.
-            MANDATORY: Acknowledge that lifestyle change can be challenging but is a profound investment in future health and wellbeing. 
-            MANDATORY: State that if unsure how to start, please discuss these ideas with a health professional who can provide assistance.
-            Data: Assets: ${strengths.map(s => s.label).join(', ')}. Opportunities: ${focusAreas.map(f => f.label).join(', ')}.
-            Avoid Risks context: Limiting alcohol reduces community harm; avoid tobacco to protect long-term heart and lung health.`;
-
             try {
-                const data = await callGemini(prompt);
+                // Send current assessment data to the serverless function
+                const response = await fetch("/.netlify/functions/gemini", { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ratings: pillars }) 
+                });
+
+                if (!response.ok) throw new Error("API_FAIL");
+                const apiData = await response.json();
+                
+                let text = apiData.candidates[0].content.parts[0].text;
+                const data = JSON.parse(text);
+
                 let html = `<p class="text-xl text-center font-medium italic text-slate-700 pb-8 border-b">"${data.intro}"</p>`;
 
                 if (data.strengths?.length) {
                     html += `
                         <div class="bg-green-50 p-8 rounded-3xl mt-8">
-                            <h3 class="text-2xl font-bold text-green-800 mb-6">Your Foundations</h3>
+                            <h3 class="text-2xl font-bold text-green-800 mb-6">Established Health Foundations</h3>
                             <div class="grid md:grid-cols-2 gap-4">
                                 ${data.strengths.map(s => `
                                     <div class="bg-white p-4 rounded-xl shadow-sm">
@@ -242,7 +197,7 @@
                     data.steps.forEach(a => {
                         html += `
                             <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
-                                <h3 class="text-2xl font-bold text-teal-800 mb-6">Opportunity: ${a.label}</h3>
+                                <h3 class="text-2xl font-bold text-teal-800 mb-6">Growth Opportunity: ${a.label}</h3>
                                 <ul class="grid md:grid-cols-2 gap-4">
                                     ${a.advice.map(step => `
                                         <li class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
@@ -257,18 +212,18 @@
                 }
 
                 html += `
-                    <div class="text-center p-8 bg-blue-50 rounded-3xl mt-8 text-blue-900">
+                    <div class="mt-12 text-center p-8 bg-blue-50 border border-blue-100 rounded-3xl text-blue-900">
                         <p class="text-lg font-semibold">Lifestyle change is a powerful investment in your future.</p>
                         <p class="mt-2 leading-relaxed">While modification can be challenging, every small positive choice matters. If you are unsure how to start, please discuss these ideas with a health professional who can provide personalised assistance.</p>
                     </div>`;
-                
+
                 adviceContent.innerHTML = html;
                 adviceContent.scrollIntoView({ behavior: 'smooth' });
             } catch (e) {
                 adviceContent.innerHTML = `
                     <div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto">
-                        <h4 class="text-2xl font-bold mb-2">Technical Connection Issue</h4>
-                        <p class="font-medium">The analysis engine is currently establishing a connection. If this persists, please ensure your Netlify environment variable 'GEMINI_API_KEY' has been added and the site has finished redeploying.</p>
+                        <h4 class="text-2xl font-bold mb-2">Analysis Engine Connectivity Issue</h4>
+                        <p class="font-medium">The service is currently unavailable. Please verify that the 'package.json' file is present in your GitHub root and that you have selected "Clear cache and deploy site" in the Netlify dashboard.</p>
                     </div>`;
             } finally {
                 spinner.classList.add('hidden');
