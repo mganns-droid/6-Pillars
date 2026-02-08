@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lifestyle Medicine Assessment | Psych and Lifestyle</title>
-    <!-- Core External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -125,8 +124,10 @@
                     body: JSON.stringify({ ratings: pillars }) 
                 });
 
-                if (!response.ok) throw new Error("Server communication failure.");
+                if (!response.ok) throw new Error("Server failure.");
                 const data = await response.json(); 
+
+                if (!data || !data.intro) throw new Error("Invalid response format.");
 
                 let html = `<p class="text-xl text-center font-medium italic text-slate-700 pb-8 border-b">"${data.intro}"</p>`;
                 if (data.strengths?.length) {
@@ -140,7 +141,8 @@
                 adviceContent.innerHTML = html;
                 adviceContent.scrollIntoView({ behavior: 'smooth' });
             } catch (e) {
-                adviceContent.innerHTML = `<div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto"><h4 class="text-2xl font-bold mb-2">Technical Connection Issue</h4><p class="font-medium">The analysis engine is currently finishing its setup. Please refresh the page and try again in 1 minute.</p></div>`;
+                console.error(e);
+                adviceContent.innerHTML = `<div class="text-center p-12 bg-red-50 text-red-700 rounded-3xl border-2 border-red-100 max-w-2xl mx-auto"><h4 class="text-2xl font-bold mb-2">Technical Connection Issue</h4><p class="font-medium">The analysis engine encountered a mismatch. Please ensure you have triggered "Clear cache and deploy site" in the Netlify dashboard to register the latest code updates.</p></div>`;
             } finally {
                 spinner.classList.add('hidden');
                 getAdviceBtn.disabled = false;
