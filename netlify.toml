@@ -1,12 +1,11 @@
-[build]
-  # Directs Netlify to the correct folder for your functions
-  functions = "netlify/functions"
-
-[[redirects]]
-  # Simplifies API calls for the frontend
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-
-
-
+{
+  "name": "psych-lifestyle-assessment",
+  "version": "1.0.0",
+  "description": "Lifestyle Medicine 6 Pillars Assessment Tool",
+  "main": "index.html",
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  },
+  "author": "Psych and Lifestyle",
+  "license": "ISC"
+}
