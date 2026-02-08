@@ -154,49 +154,42 @@
         </footer>
     </div>
 
-    <script>
-        /**
-         * API KEY CONFIGURATION
-         * 1. If testing within this preview window, leave apiKey as "".
-         * 2. For your live website, insert your key from https://aistudio.google.com/
-         */
-        const apiKey = ""; 
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const corePillarsGrid = document.getElementById('core-pillars-grid');
+        const additionalPillarsGrid = document.getElementById('additional-pillars-grid');
+        const getAdviceBtn = document.getElementById('get-advice-btn');
+        const adviceOutput = document.getElementById('advice-output');
+        const adviceContent = document.getElementById('advice-content');
+        const spinner = document.getElementById('spinner');
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const corePillarsGrid = document.getElementById('core-pillars-grid');
-            const additionalPillarsGrid = document.getElementById('additional-pillars-grid');
-            const getAdviceBtn = document.getElementById('get-advice-btn');
-            const adviceOutput = document.getElementById('advice-output');
-            const adviceContent = document.getElementById('advice-content');
-            const spinner = document.getElementById('spinner');
+        const guidelines = {
+            move: "Australian Physical Activity Guidelines recommend 150-300 mins of moderate activity weekly.",
+            nourish: "Australian Dietary Guidelines recommend 5 serves of vegetables and 2 serves of fruit daily.",
+            rest: "Adults generally require 7 to 9 hours of restorative sleep for optimal health.",
+            avoidRisks: "NHMRC guidelines recommend no more than 10 standard drinks per week and no more than 4 in one day.",
+            connect: "Social connection is a fundamental human need and a key pillar of mental health.",
+            manageStress: "Active stress management helps balance the body's physiological responses.",
+            purpose: "Having a sense of meaning is linked to improved health outcomes and longevity.",
+            nature: "Regular connection with the natural world is shown to lower stress and improve mood."
+        };
 
-            const guidelines = {
-                move: "Australian Physical Activity Guidelines recommend 150-300 mins of moderate activity weekly.",
-                nourish: "Australian Dietary Guidelines recommend 5 serves of vegetables and 2 serves of fruit daily.",
-                rest: "Adults generally require 7 to 9 hours of restorative sleep for optimal health.",
-                avoidRisks: "NHMRC guidelines recommend no more than 10 standard drinks per week and no more than 4 in one day.",
-                connect: "Social connection is a fundamental human need and a key pillar of mental health.",
-                manageStress: "Active stress management helps balance the body's physiological responses.",
-                purpose: "Having a sense of meaning is linked to improved health outcomes and longevity.",
-                nature: "Regular connection with the natural world is shown to lower stress and improve mood."
-            };
+        const pillars = [
+            { id: 'nourish', label: 'Nourish', question: 'Intake of whole, plant-predominant foods?', value: 5, icon: '🍎', description: "Focusing on minimally processed, whole foods.", anchor: '0 = Highly processed; 10 = Whole food focus', color: '#D9F2D9' },
+            { id: 'move', label: 'Move', question: 'How consistently are you active?', value: 5, icon: '🏃', description: "Finding daily movement that feels good and energising.", anchor: '0 = Sedentary; 10 = Consistently active', color: '#D6EEFB' },
+            { id: 'manageStress', label: 'Manage Stress', question: 'Efficacy of your relaxation strategies?', value: 5, icon: '🧘', description: "Using simple techniques to help your mind and body reset.", anchor: '0 = Feeling overwhelmed; 10 = Managing effectively', color: '#E6E4F9' },
+            { id: 'rest', label: 'Rest', question: 'Quality and duration of your sleep?', value: 5, icon: '😴', description: "Prioritising rest to allow your brain and body to recover.", anchor: '0 = Poor/Short; 10 = Deeply restorative', color: '#E2F0F7' },
+            { id: 'connect', label: 'Connect', question: 'Strength of your social support network?', value: 5, icon: '🤝', description: "Nurturing the relationships that make you feel understood.", anchor: '0 = Isolated; 10 = Very connected', color: '#FFE4D6' },
+            { id: 'avoidRisks', label: 'Avoid Risks', question: 'Mindfulness of risky substances?', value: 5, icon: '🚭', description: "Choosing to limit alcohol and avoid tobacco for future health.", anchor: '0 = High usage; 10 = Consistent avoidance', color: '#FAD9DC' },
+            { id: 'purpose', label: 'Purpose', question: 'Connection to your sense of meaning?', value: 5, icon: '🧭', description: "Living in alignment with your personal values.", isCore: false, anchor: '0 = Unclear direction; 10 = Purpose-driven', color: '#FAE7B5' },
+            { id: 'nature', label: 'Nature', question: 'Time spent in the natural world?', value: 5, icon: '🌳', description: "Getting outdoors to refresh your perspective.", isCore: false, anchor: '0 = Almost never; 10 = Daily engagement', color: '#DDEEE0' },
+        ];
 
-            const pillars = [
-                { id: 'nourish', label: 'Nourish', question: 'Intake of whole, plant-predominant foods?', value: 5, icon: '🍎', description: "Focusing on minimally processed, whole foods.", anchor: '0 = Highly processed; 10 = Whole food focus', color: '#D9F2D9' },
-                { id: 'move', label: 'Move', question: 'How consistently are you active?', value: 5, icon: '🏃', description: "Finding daily movement that feels good and energising.", anchor: '0 = Sedentary; 10 = Consistently active', color: '#D6EEFB' },
-                { id: 'manageStress', label: 'Manage Stress', question: 'Efficacy of your relaxation strategies?', value: 5, icon: '🧘', description: "Using simple techniques to help your mind and body reset.", anchor: '0 = Feeling overwhelmed; 10 = Managing effectively', color: '#E6E4F9' },
-                { id: 'rest', label: 'Rest', question: 'Quality and duration of your sleep?', value: 5, icon: '😴', description: "Prioritising rest to allow your brain and body to recover.", anchor: '0 = Poor/Short; 10 = Deeply restorative', color: '#E2F0F7' },
-                { id: 'connect', label: 'Connect', question: 'Strength of your social support network?', value: 5, icon: '🤝', description: "Nurturing the relationships that make you feel understood.", anchor: '0 = Isolated; 10 = Very connected', color: '#FFE4D6' },
-                { id: 'avoidRisks', label: 'Avoid Risks', question: 'Mindfulness of risky substances?', value: 5, icon: '🚭', description: "Choosing to limit alcohol and avoid tobacco for future health.", anchor: '0 = High usage; 10 = Consistent avoidance', color: '#FAD9DC' },
-                { id: 'purpose', label: 'Purpose', question: 'Connection to your sense of meaning?', value: 5, icon: '🧭', description: "Living in alignment with your personal values.", isCore: false, anchor: '0 = Unclear direction; 10 = Purpose-driven', color: '#FAE7B5' },
-                { id: 'nature', label: 'Nature', question: 'Time spent in the natural world?', value: 5, icon: '🌳', description: "Getting outdoors to refresh your perspective.", isCore: false, anchor: '0 = Almost never; 10 = Daily engagement', color: '#DDEEE0' },
-            ];
-
-            function renderPillars() {
-                pillars.forEach((p, i) => {
-                    const html = `
-                        <div class="pillar-card">
-                            <div class="flex-grow">
+        function renderPillars() {
+            pillars.forEach((p, i) => {
+                const html = `
+                    <div class="pillar-card">
+                        <div class="flex-grow
                                 <div class="flex items-center mb-3">
                                     <div class="icon-background" style="background-color: ${p.color};">
                                         <span>${p.icon}</span>
@@ -393,4 +386,5 @@
         });
     </script>
 </body>
+
 </html>
